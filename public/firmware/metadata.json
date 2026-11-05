@@ -1,0 +1,79 @@
+{
+  "schemaVersion": "1.0.0",
+  "toolchain": {
+    "sourceIndex": "https://downloads.arduino.cc/packages/package_index.json",
+    "url": "https://downloads.arduino.cc/tools/avr-gcc-7.3.0-atmel3.6.1-arduino7-i686-w64-mingw32.zip",
+    "archiveSha256": "a54f64755fff4cb792a1495e5defdd789902a2a3503982e81b898299cf39800e"
+  },
+  "hardwareComparison": "not performed",
+  "fixtures": [
+    {
+      "name": "blink-uart",
+      "target": "atmega328p",
+      "clockHz": 16000000,
+      "outputPin": "D13",
+      "timer": "Timer1 CTC OCR1A=15624 prescaler=256",
+      "toggleIntervalCycles": 4000000,
+      "toggleIntervalMicros": 250000,
+      "uartBaudRequested": 9600,
+      "uartRegisterDivisor": 103,
+      "uartExpected": [
+        "SIMULAB AVR READY\n",
+        "LED ON\n",
+        "LED OFF\n"
+      ],
+      "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+      "compilerCommand": "avr-gcc -mmcu=atmega328p -DF_CPU=16000000UL -DLED_BIT=PB5 -std=gnu11 -Os -Wall -Wextra -Werror -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,-Map=firmware/blink-uart.map -o firmware/blink-uart.elf firmware/blink-uart.c",
+      "objcopyCommand": "avr-objcopy -O ihex -R .eeprom firmware/blink-uart.elf firmware/blink-uart.hex",
+      "source": "blink-uart.c",
+      "sourceSha256": "af714b71c199920a0659d4b556001bd2d4fd30193e47bc8160e2f8eaf3926274",
+      "elfSha256": "11a235dbe1434f2944b2ca7bafea22f63ed39aa54009c491943b85b65ea24d79",
+      "hexSha256": "ed281611e1eb43d145095567adc25e563beaf9ca5e200c456c9966178412e087",
+      "sizes": "text\t   data\t    bss\t    dec\t    hex\tfilename\r\n    362\t     36\t      1\t    399\t    18f\tfirmware/blink-uart.elf"
+    },
+    {
+      "name": "alternate-d12",
+      "target": "atmega328p",
+      "clockHz": 16000000,
+      "outputPin": "D12",
+      "timer": "Timer1 CTC OCR1A=15624 prescaler=256",
+      "toggleIntervalCycles": 4000000,
+      "toggleIntervalMicros": 250000,
+      "uartBaudRequested": 9600,
+      "uartRegisterDivisor": 103,
+      "uartExpected": [
+        "SIMULAB AVR READY\n",
+        "LED ON\n",
+        "LED OFF\n"
+      ],
+      "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+      "compilerCommand": "avr-gcc -mmcu=atmega328p -DF_CPU=16000000UL -DLED_BIT=PB4 -std=gnu11 -Os -Wall -Wextra -Werror -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,-Map=firmware/alternate-d12.map -o firmware/alternate-d12.elf firmware/blink-uart.c",
+      "objcopyCommand": "avr-objcopy -O ihex -R .eeprom firmware/alternate-d12.elf firmware/alternate-d12.hex",
+      "source": "blink-uart.c",
+      "sourceSha256": "af714b71c199920a0659d4b556001bd2d4fd30193e47bc8160e2f8eaf3926274",
+      "elfSha256": "c9071ab86e70bc75ba2a586281e948cb03b36c516bd1d3042722979ed9b835f0",
+      "hexSha256": "540f9c4a2d254203b785d82648bbd37fc74c03160c85b1c14a6358a899db0d74",
+      "sizes": "text\t   data\t    bss\t    dec\t    hex\tfilename\r\n    362\t     36\t      1\t    399\t    18f\tfirmware/alternate-d12.elf"
+    },
+    {
+      "name": "input-mirror",
+      "target": "atmega328p",
+      "clockHz": 16000000,
+      "outputPin": "D11",
+      "timer": null,
+      "toggleIntervalCycles": null,
+      "toggleIntervalMicros": null,
+      "uartBaudRequested": null,
+      "uartRegisterDivisor": null,
+      "uartExpected": [],
+      "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+      "compilerCommand": "avr-gcc -mmcu=atmega328p -DF_CPU=16000000UL -DLED_BIT=PB3 -std=gnu11 -Os -Wall -Wextra -Werror -ffunction-sections -fdata-sections -Wl,--gc-sections -Wl,-Map=firmware/input-mirror.map -o firmware/input-mirror.elf firmware/input-mirror.c",
+      "objcopyCommand": "avr-objcopy -O ihex -R .eeprom firmware/input-mirror.elf firmware/input-mirror.hex",
+      "source": "input-mirror.c",
+      "sourceSha256": "9b201e1d0b455e35ba1b0fa3b59d0d7e637d2b29268e9e85bbc3ab967ec79dcd",
+      "elfSha256": "935eef813c656781f37a82426132f500f594bb645bee13bb6ab68a3877d883dc",
+      "hexSha256": "9d9cd7903d4c5c40199bca7c8ffaa583e8b9a38cd59159c0401b3901fe4672d7",
+      "sizes": "text\t   data\t    bss\t    dec\t    hex\tfilename\r\n    150\t      0\t      0\t    150\t     96\tfirmware/input-mirror.elf"
+    }
+  ]
+}
