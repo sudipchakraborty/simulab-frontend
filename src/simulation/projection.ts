@@ -1,4 +1,5 @@
-﻿import { catalog } from "../circuit/catalog";
+import { ydBoard, supportsGPIOOutput } from "../boards/yd-esp32-s3";
+import { catalog } from "../circuit/catalog";
 import { endpointKey } from "../circuit/netlist";
 import type { CircuitProject, Endpoint } from "../circuit/types";
 
@@ -9,7 +10,7 @@ export interface SignalProjection {
 }
 
 /** @brief Project actual MCU output levels onto a circuit's explicit endpoints.
- * @param project Validated circuit document. Exactly one Uno is supported.
+ * @param project Validated circuit document. Exactly one supported MCU board is supported.
  * @param gpio Output-only digital snapshot, where null is undriven/high impedance.
  * @returns Per-LED states (true lit, false valid but unlit, null unknown) and model issues.
  * @details Wires, positive resistors and pressed switches propagate ideal digital
@@ -28,11 +29,13 @@ export function projectSignals(
     ),
     issues: [],
   };
-  const boards = project.components.filter((c) => c.kind === "uno");
+  const boards = project.components.filter(
+    (c) => c.kind === "uno" || c.kind === "yd-esp32-s3",
+  );
   if (boards.length !== 1) {
     if (project.components.length)
       result.issues.push(
-        "Exactly one Arduino Uno is supported for digital signal projection.",
+        boards.every(c=>c.kind==="uno")?"Exactly one Arduino Uno is supported for digital signal projection.":"Exactly one supported MCU board is required for digital signal projection.",
       );
     return result;
   }
@@ -92,6 +95,15 @@ export function projectSignals(
         { componentId: component.id, pinId: "2" },
       );
   }
+  for (const component of project.components.filter(
+    (c) => c.kind === "yd-esp32-s3",
+  ))
+    for (const group of ydBoard.internalNets)
+      for (const pinId of group.pinIds.slice(1))
+        union(
+          { componentId: component.id, pinId: group.pinIds[0] },
+          { componentId: component.id, pinId },
+        );
   const drivers = new Map<string, Set<0 | 1>>();
   const board = boards[0];
   const drive = (pinId: string, value: 0 | 1) => {
@@ -101,12 +113,40 @@ export function projectSignals(
     if (!drivers.has(net)) drivers.set(net, new Set());
     drivers.get(net)!.add(value);
   };
-  drive("5V", 1);
-  drive("GND", 0);
-  for (const pin of catalog.uno.pins) {
-    if (!/^(D(?:[0-9]|1[0-3])|A[0-5])$/.test(pin.id)) continue;
-    const level = gpio[pin.id];
-    if (level === 0 || level === 1) drive(pin.id, level);
+  if (board.kind === "uno") {
+    drive("5V", 1);
+    drive("GND", 0);
+    for (const pin of catalog.uno.pins) {
+      if (!/^(D(?:[0-9]|1[0-3])|A[0-5])$/.test(pin.id)) continue;
+      const level = gpio[pin.id];
+      if (level === 0 || level === 1) drive(pin.id, level);
+    }
+  } else {
+    for (const pin of ydBoard.pins) {
+      if (pin.electricalType === "ground") drive(pin.id, 0);
+      if (pin.electricalType === "power") drive(pin.id, 1);
+      if (pin.gpio === null) continue;
+      if (
+        !supportsGPIOOutput(
+          pin,
+          String(board.properties.memoryVariant ?? "unconfirmed"),
+        )
+      ) {
+        if (
+          project.wires.some((w) =>
+            [w.from, w.to].some(
+              (e) => e.componentId === board.id && e.pinId === pin.id,
+            ),
+          )
+        )
+          result.issues.push(
+            `GPIO${pin.gpio} is reserved by the selected or unconfirmed memory module.`,
+          );
+        continue;
+      }
+      const level = gpio[`GPIO${pin.gpio}`];
+      if (level === 0 || level === 1) drive(pin.id, level);
+    }
   }
   const conflict = new Set<string>();
   for (const [net, levels] of drivers)

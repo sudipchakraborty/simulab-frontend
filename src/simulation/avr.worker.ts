@@ -80,7 +80,10 @@ scope.onmessage = (event: MessageEvent<unknown>) => {
         if (typeof command.hex !== "string" || command.hex.length > 131072)
           throw new Error("Firmware must be Intel HEX text below 128 KiB.");
         project = parseProject(JSON.stringify(command.project));
-        if (project.components.filter((c) => c.kind === "uno").length !== 1)
+        if (
+          project.components.filter((c) => c.kind === "uno").length !== 1 ||
+          project.components.some((c) => c.kind === "yd-esp32-s3")
+        )
           throw new Error("Execution requires exactly one Arduino Uno board.");
         runtime = new UnoRuntime(command.hex);
         snapshot(id);

@@ -1,0 +1,1412 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "yd-esp32-s3-2022-v1.3",
+  "name": "YD-ESP32-S3-2022-V1.3",
+  "manufacturer": "VCC-GND Studio",
+  "revision": "2022-V1.3",
+  "mcu": "ESP32-S3",
+  "cpu": "Dual-core Xtensa LX7",
+  "physicalPins": 44,
+  "numberingConvention": "physicalNumber is a UI ordinal: P1 top-to-bottom 1..22, P2 top-to-bottom 23..44. Manufacturer header numbers are header and headerIndex. All positions are module-side view with antenna at top and USB connectors at bottom.",
+  "dimensionsMm": {
+    "width": 27.94,
+    "height": 63.39
+  },
+  "dimensionStatus": "manufacturer-drawing-verified",
+  "verification": {
+    "pinout": "manufacturer-family-verified",
+    "exactRevision": "requires-confirmation",
+    "note": "Manufacturer repository provides family header tables and V1.4 schematic, not an independently verified 2022-V1.3 schematic. Confirm the physical board revision and module marking."
+  },
+  "memory": {
+    "defaultVariant": "unconfirmed",
+    "profiles": {
+      "N16R8": {
+        "flashMB": 16,
+        "psramMB": 8,
+        "psramMode": "octal",
+        "reservedGpio": [35, 36, 37],
+        "verification": "module-marking-required"
+      }
+    }
+  },
+  "onboard": {
+    "rgb": {
+      "gpio": 48,
+      "type": "WS2812",
+      "verification": "manufacturer-family"
+    },
+    "boot": {
+      "gpio": 0,
+      "activeLow": true
+    },
+    "reset": {
+      "signal": "EN",
+      "activeLow": true
+    },
+    "usb": [
+      {
+        "type": "USB-C",
+        "role": "native",
+        "gpioDm": 19,
+        "gpioDp": 20
+      },
+      {
+        "type": "USB-C",
+        "role": "usb-to-uart",
+        "bridge": "CH343P",
+        "uartTx": 43,
+        "uartRx": 44
+      }
+    ]
+  },
+  "internalNets": [
+    {
+      "name": "3V3",
+      "pinIds": ["P1.1", "P1.2"]
+    },
+    {
+      "name": "GND",
+      "pinIds": ["P1.22", "P2.1", "P2.21", "P2.22"]
+    }
+  ],
+  "sources": [
+    {
+      "url": "https://github.com/vcc-gnd/YD-ESP32-S3/blob/b4ac4d60d1845a554bbbc7c97806ccb97cf08941/README.md",
+      "revision": "b4ac4d60d1845a554bbbc7c97806ccb97cf08941",
+      "purpose": "Manufacturer family pin order, GPIO48 RGB, USB, UART, BOOT and octal-memory restrictions"
+    },
+    {
+      "url": "https://github.com/espressif/esp-idf/blob/v5.4.2/components/soc/esp32s3/include/soc/soc_caps.h",
+      "revision": "v5.4.2",
+      "purpose": "All valid ESP32-S3 GPIO including46 are output-capable; do not copy classic ESP32 input-only restrictions"
+    },
+    {
+      "url": "https://docs.espressif.com/projects/esp-idf/en/stable/esp32s3/api-reference/peripherals/gpio.html",
+      "revision": "ESP-IDF stable accessed2026-11-05",
+      "purpose": "GPIO matrix, strapping and flash/PSRAM restrictions"
+    },
+    {
+      "url": "https://github.com/vcc-gnd/YD-ESP32-S3/blob/b4ac4d60d1845a554bbbc7c97806ccb97cf08941/5-public-YD-ESP32-S3-Hardware%20info/ESP32-S3-Metric.pdf",
+      "revision": "b4ac4d60d1845a554bbbc7c97806ccb97cf08941",
+      "purpose": "Manufacturer metric drawing: width27.94mm, overall height63.39mm, PCB57.15mm, header pitch2.54mm, rows53.34mm, columns25.40mm. Family reference; exactV1.3 remains unconfirmed."
+    }
+  ],
+  "pins": [
+    {
+      "id": "P1.1",
+      "physicalNumber": 1,
+      "header": "P1",
+      "headerIndex": 1,
+      "side": "left",
+      "label": "3V3",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "power",
+      "functions": ["3V3"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P1.2",
+      "physicalNumber": 2,
+      "header": "P1",
+      "headerIndex": 2,
+      "side": "left",
+      "label": "3V3",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "power",
+      "functions": ["3V3"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P1.3",
+      "physicalNumber": 3,
+      "header": "P1",
+      "headerIndex": 3,
+      "side": "left",
+      "label": "RST",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "input",
+      "functions": ["EN"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P1.4",
+      "physicalNumber": 4,
+      "header": "P1",
+      "headerIndex": 4,
+      "side": "left",
+      "label": "4",
+      "gpio": 4,
+      "arduinoPin": 4,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO4",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO4",
+        "TOUCH4",
+        "ADC1_CH3"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 3
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.5",
+      "physicalNumber": 5,
+      "header": "P1",
+      "headerIndex": 5,
+      "side": "left",
+      "label": "5",
+      "gpio": 5,
+      "arduinoPin": 5,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO5",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO5",
+        "TOUCH5",
+        "ADC1_CH4"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 4
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.6",
+      "physicalNumber": 6,
+      "header": "P1",
+      "headerIndex": 6,
+      "side": "left",
+      "label": "6",
+      "gpio": 6,
+      "arduinoPin": 6,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO6",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO6",
+        "TOUCH6",
+        "ADC1_CH5"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 5
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.7",
+      "physicalNumber": 7,
+      "header": "P1",
+      "headerIndex": 7,
+      "side": "left",
+      "label": "7",
+      "gpio": 7,
+      "arduinoPin": 7,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO7",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO7",
+        "TOUCH7",
+        "ADC1_CH6"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 6
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.8",
+      "physicalNumber": 8,
+      "header": "P1",
+      "headerIndex": 8,
+      "side": "left",
+      "label": "15",
+      "gpio": 15,
+      "arduinoPin": 15,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO15",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO15",
+        "ADC2_CH4",
+        "U0RTS",
+        "XTAL_32K_P"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 4
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.9",
+      "physicalNumber": 9,
+      "header": "P1",
+      "headerIndex": 9,
+      "side": "left",
+      "label": "16",
+      "gpio": 16,
+      "arduinoPin": 16,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO16",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO16",
+        "ADC2_CH5",
+        "U0CTS",
+        "XTAL_32K_N"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 5
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.10",
+      "physicalNumber": 10,
+      "header": "P1",
+      "headerIndex": 10,
+      "side": "left",
+      "label": "17",
+      "gpio": 17,
+      "arduinoPin": 17,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO17",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO17",
+        "ADC2_CH6",
+        "U1TXD"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 6
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.11",
+      "physicalNumber": 11,
+      "header": "P1",
+      "headerIndex": 11,
+      "side": "left",
+      "label": "18",
+      "gpio": 18,
+      "arduinoPin": 18,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO18",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO18",
+        "ADC2_CH7",
+        "U1RXD",
+        "CLK_OUT3"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 7
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.12",
+      "physicalNumber": 12,
+      "header": "P1",
+      "headerIndex": 12,
+      "side": "left",
+      "label": "8",
+      "gpio": 8,
+      "arduinoPin": 8,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO8",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO8",
+        "TOUCH8",
+        "ADC1_CH7",
+        "SUBSPICS1"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 7
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.13",
+      "physicalNumber": 13,
+      "header": "P1",
+      "headerIndex": 13,
+      "side": "left",
+      "label": "3",
+      "gpio": 3,
+      "arduinoPin": 3,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO3",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO3",
+        "TOUCH3",
+        "ADC1_CH2"
+      ],
+      "restrictions": ["strapping"],
+      "adc": {
+        "unit": 1,
+        "channel": 2
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.14",
+      "physicalNumber": 14,
+      "header": "P1",
+      "headerIndex": 14,
+      "side": "left",
+      "label": "46",
+      "gpio": 46,
+      "arduinoPin": 46,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO46",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC"
+      ],
+      "restrictions": ["strapping"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.15",
+      "physicalNumber": 15,
+      "header": "P1",
+      "headerIndex": 15,
+      "side": "left",
+      "label": "9",
+      "gpio": 9,
+      "arduinoPin": 9,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO9",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO9",
+        "TOUCH9",
+        "ADC1_CH8",
+        "FSPIHD",
+        "SUBSPIHD"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 8
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.16",
+      "physicalNumber": 16,
+      "header": "P1",
+      "headerIndex": 16,
+      "side": "left",
+      "label": "10",
+      "gpio": 10,
+      "arduinoPin": 10,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO10",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO10",
+        "TOUCH10",
+        "ADC1_CH9",
+        "FSPICS0",
+        "FSPIIO4",
+        "SUBSPICS0"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 9
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.17",
+      "physicalNumber": 17,
+      "header": "P1",
+      "headerIndex": 17,
+      "side": "left",
+      "label": "11",
+      "gpio": 11,
+      "arduinoPin": 11,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO11",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO11",
+        "TOUCH11",
+        "ADC2_CH0",
+        "FSPID",
+        "FSPIIO5",
+        "SUBSPID"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 0
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.18",
+      "physicalNumber": 18,
+      "header": "P1",
+      "headerIndex": 18,
+      "side": "left",
+      "label": "12",
+      "gpio": 12,
+      "arduinoPin": 12,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO12",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO12",
+        "TOUCH12",
+        "ADC2_CH1",
+        "FSPICLK",
+        "FSPIIO6",
+        "SUBSPICLK"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 1
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.19",
+      "physicalNumber": 19,
+      "header": "P1",
+      "headerIndex": 19,
+      "side": "left",
+      "label": "13",
+      "gpio": 13,
+      "arduinoPin": 13,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO13",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO13",
+        "TOUCH13",
+        "ADC2_CH2",
+        "FSPIQ",
+        "FSPIIO7",
+        "SUBSPIQ"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 2
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.20",
+      "physicalNumber": 20,
+      "header": "P1",
+      "headerIndex": 20,
+      "side": "left",
+      "label": "14",
+      "gpio": 14,
+      "arduinoPin": 14,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO14",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO14",
+        "TOUCH14",
+        "ADC2_CH3",
+        "FSPIWP",
+        "FSPIDQS",
+        "SUBSPIWP"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 2,
+        "channel": 3
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P1.21",
+      "physicalNumber": 21,
+      "header": "P1",
+      "headerIndex": 21,
+      "side": "left",
+      "label": "5V",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "power",
+      "functions": ["5V"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P1.22",
+      "physicalNumber": 22,
+      "header": "P1",
+      "headerIndex": 22,
+      "side": "left",
+      "label": "G",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "ground",
+      "functions": ["GND"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P2.1",
+      "physicalNumber": 23,
+      "header": "P2",
+      "headerIndex": 1,
+      "side": "right",
+      "label": "G",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "ground",
+      "functions": ["GND"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P2.2",
+      "physicalNumber": 24,
+      "header": "P2",
+      "headerIndex": 2,
+      "side": "right",
+      "label": "TX",
+      "gpio": 43,
+      "arduinoPin": 43,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO43",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "U0TXD",
+        "CLK_OUT1"
+      ],
+      "restrictions": ["uart0-bridge-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.3",
+      "physicalNumber": 25,
+      "header": "P2",
+      "headerIndex": 3,
+      "side": "right",
+      "label": "RX",
+      "gpio": 44,
+      "arduinoPin": 44,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO44",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "U0RXD",
+        "CLK_OUT2"
+      ],
+      "restrictions": ["uart0-bridge-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.4",
+      "physicalNumber": 26,
+      "header": "P2",
+      "headerIndex": 4,
+      "side": "right",
+      "label": "1",
+      "gpio": 1,
+      "arduinoPin": 1,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO1",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO1",
+        "TOUCH1",
+        "ADC1_CH0"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 0
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.5",
+      "physicalNumber": 27,
+      "header": "P2",
+      "headerIndex": 5,
+      "side": "right",
+      "label": "2",
+      "gpio": 2,
+      "arduinoPin": 2,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO2",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO2",
+        "TOUCH2",
+        "ADC1_CH1"
+      ],
+      "restrictions": [],
+      "adc": {
+        "unit": 1,
+        "channel": 1
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.6",
+      "physicalNumber": 28,
+      "header": "P2",
+      "headerIndex": 6,
+      "side": "right",
+      "label": "42",
+      "gpio": 42,
+      "arduinoPin": 42,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO42",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "MTMS"
+      ],
+      "restrictions": ["jtag-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.7",
+      "physicalNumber": 29,
+      "header": "P2",
+      "headerIndex": 7,
+      "side": "right",
+      "label": "41",
+      "gpio": 41,
+      "arduinoPin": 41,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO41",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "MTDI",
+        "CLK_OUT1"
+      ],
+      "restrictions": ["jtag-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.8",
+      "physicalNumber": 30,
+      "header": "P2",
+      "headerIndex": 8,
+      "side": "right",
+      "label": "40",
+      "gpio": 40,
+      "arduinoPin": 40,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO40",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "MTDO",
+        "CLK_OUT2"
+      ],
+      "restrictions": ["jtag-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.9",
+      "physicalNumber": 31,
+      "header": "P2",
+      "headerIndex": 9,
+      "side": "right",
+      "label": "39",
+      "gpio": 39,
+      "arduinoPin": 39,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO39",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "MTCK",
+        "CLK_OUT3",
+        "SUBSPICS1"
+      ],
+      "restrictions": ["jtag-shared"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.10",
+      "physicalNumber": 32,
+      "header": "P2",
+      "headerIndex": 10,
+      "side": "right",
+      "label": "38",
+      "gpio": 38,
+      "arduinoPin": 38,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO38",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "FSPIWP",
+        "SUBSPIWP"
+      ],
+      "restrictions": [],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.11",
+      "physicalNumber": 33,
+      "header": "P2",
+      "headerIndex": 11,
+      "side": "right",
+      "label": "37",
+      "gpio": 37,
+      "arduinoPin": 37,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO37",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "SPIDQS",
+        "FSPIQ",
+        "SUBSPIQ"
+      ],
+      "restrictions": ["reserved-on-octal-memory-variants"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.12",
+      "physicalNumber": 34,
+      "header": "P2",
+      "headerIndex": 12,
+      "side": "right",
+      "label": "36",
+      "gpio": 36,
+      "arduinoPin": 36,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO36",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "SPIIO7",
+        "FSPICLK",
+        "SUBSPICLK"
+      ],
+      "restrictions": ["reserved-on-octal-memory-variants"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.13",
+      "physicalNumber": 35,
+      "header": "P2",
+      "headerIndex": 13,
+      "side": "right",
+      "label": "35",
+      "gpio": 35,
+      "arduinoPin": 35,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO35",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "SPIIO6",
+        "FSPID",
+        "SUBSPID"
+      ],
+      "restrictions": ["reserved-on-octal-memory-variants"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.14",
+      "physicalNumber": 36,
+      "header": "P2",
+      "headerIndex": 14,
+      "side": "right",
+      "label": "0",
+      "gpio": 0,
+      "arduinoPin": 0,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO0",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO0"
+      ],
+      "restrictions": ["strapping"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.15",
+      "physicalNumber": 37,
+      "header": "P2",
+      "headerIndex": 15,
+      "side": "right",
+      "label": "45",
+      "gpio": 45,
+      "arduinoPin": 45,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO45",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC"
+      ],
+      "restrictions": ["strapping"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.16",
+      "physicalNumber": 38,
+      "header": "P2",
+      "headerIndex": 16,
+      "side": "right",
+      "label": "48",
+      "gpio": 48,
+      "arduinoPin": 48,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO48",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "SPICLK_N",
+        "SUBSPICLK_N_DIFF",
+        "WS2812_DATA"
+      ],
+      "restrictions": ["onboard-ws2812-shared", "check-module-voltage-variant"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.17",
+      "physicalNumber": 39,
+      "header": "P2",
+      "headerIndex": 17,
+      "side": "right",
+      "label": "47",
+      "gpio": 47,
+      "arduinoPin": 47,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO47",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "SPICLK_P",
+        "SUBSPICLK_P_DIFF"
+      ],
+      "restrictions": ["check-module-voltage-variant"],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.18",
+      "physicalNumber": 40,
+      "header": "P2",
+      "headerIndex": 18,
+      "side": "right",
+      "label": "21",
+      "gpio": 21,
+      "arduinoPin": 21,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO21",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO21"
+      ],
+      "restrictions": [],
+      "adc": null,
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.19",
+      "physicalNumber": 41,
+      "header": "P2",
+      "headerIndex": 19,
+      "side": "right",
+      "label": "20",
+      "gpio": 20,
+      "arduinoPin": 20,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO20",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO20",
+        "ADC2_CH9",
+        "U1CTS",
+        "CLK_OUT1",
+        "USB_D+"
+      ],
+      "restrictions": ["native-usb-shared"],
+      "adc": {
+        "unit": 2,
+        "channel": 9
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.20",
+      "physicalNumber": 42,
+      "header": "P2",
+      "headerIndex": 20,
+      "side": "right",
+      "label": "19",
+      "gpio": 19,
+      "arduinoPin": 19,
+      "electricalType": "bidirectional",
+      "functions": [
+        "GPIO19",
+        "GPIO_MATRIX_UART",
+        "GPIO_MATRIX_I2C",
+        "GPIO_MATRIX_SPI",
+        "LEDC",
+        "RTC_GPIO19",
+        "ADC2_CH8",
+        "U1RTS",
+        "CLK_OUT2",
+        "USB_D-"
+      ],
+      "restrictions": ["native-usb-shared"],
+      "adc": {
+        "unit": 2,
+        "channel": 8
+      },
+      "ledc": true,
+      "i2c": true,
+      "spi": true,
+      "uart": {
+        "tx": true,
+        "rx": true
+      }
+    },
+    {
+      "id": "P2.21",
+      "physicalNumber": 43,
+      "header": "P2",
+      "headerIndex": 21,
+      "side": "right",
+      "label": "G",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "ground",
+      "functions": ["GND"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    },
+    {
+      "id": "P2.22",
+      "physicalNumber": 44,
+      "header": "P2",
+      "headerIndex": 22,
+      "side": "right",
+      "label": "G",
+      "gpio": null,
+      "arduinoPin": null,
+      "electricalType": "ground",
+      "functions": ["GND"],
+      "restrictions": [],
+      "adc": null,
+      "ledc": false,
+      "i2c": false,
+      "spi": false,
+      "uart": {
+        "tx": false,
+        "rx": false
+      }
+    }
+  ]
+}

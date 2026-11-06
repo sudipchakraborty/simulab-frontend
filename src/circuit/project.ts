@@ -37,8 +37,8 @@ const endpoint = (v: unknown): Endpoint => {
 export function parseProject(json: string): CircuitProject {
   if (json.length > 2_000_000) fail("file exceeds 2 MB character limit.");
   const root = object(JSON.parse(json));
-  if (root.schemaVersion !== "1.0.0")
-    fail("unsupported schema version; expected 1.0.0.");
+  if (root.schemaVersion !== "1.0.0" && root.schemaVersion !== "1.1.0")
+    fail("unsupported schema version; expected 1.0.0 or 1.1.0.");
   if (
     !Array.isArray(root.components) ||
     root.components.length > 1000 ||
@@ -55,6 +55,8 @@ export function parseProject(json: string): CircuitProject {
       ids.add(componentId);
       const kind = text(c.kind) as ComponentKind;
       if (!Object.hasOwn(catalog, kind)) fail("unknown component type.");
+      if (kind === "yd-esp32-s3" && root.schemaVersion !== "1.1.0")
+        fail("YD board requires circuit schema 1.1.0.");
       const position = object(c.position);
       const props = object(c.properties);
       if (Object.keys(props).length > 50) fail("too many properties.");
@@ -91,7 +93,7 @@ export function parseProject(json: string): CircuitProject {
     },
   );
   const project: CircuitProject = {
-    schemaVersion: "1.0.0",
+    schemaVersion: root.schemaVersion as CircuitProject["schemaVersion"],
     name: text(root.name),
     components,
     wires: [],

@@ -1,11 +1,11 @@
 # Dependency licenses
 
-Installed Phase2 direct dependencies plus runtime emulator. Metadata is informational; review transitive notices before commercial distribution. AVR8js MIT notice is in the engine package. SimuLab distribution license remains unselected.
+Current0.3 dependencies. Review upstream/transitive notices before commercial redistribution; SimuLab distribution license remains unselected.
 
-| Package | Version | Declared license |
+| Package/asset | Version | Declared license |
 | --- | --- | --- |
 | @playwright/test | 1.64.1 | Apache-2.0 |
-| @simulab/engine | 0.2.0 | Project license not selected |
+| @simulab/engine | 0.3.0 | Project license not selected |
 | @testing-library/jest-dom | 6.9.1 | MIT |
 | @testing-library/react | 16.3.3 | MIT |
 | @types/react | 19.3.0 | MIT |
@@ -22,3 +22,5 @@ Installed Phase2 direct dependencies plus runtime emulator. Metadata is informat
 | vite | 7.3.7 | MIT |
 | vitest | 5.1.0 | MIT |
 | zustand | 5.0.16 | MIT |
+| Official Espressif ESP-EMU JS/WASM |0.51.0 | Apache-2.0; full license served with assets |
+| MicroPython reference image |1.29.0 | MIT with upstream/ESP-IDF bundled-component notices; see supplied license and upstream source |

@@ -1,3 +1,4 @@
+import { YdBoardNode } from "./YdBoardNode";
 import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 
 import { catalog } from "../circuit/catalog";
@@ -5,7 +6,14 @@ import { catalog } from "../circuit/catalog";
 import type { CircuitComponent } from "../circuit/types";
 
 export type PartNode = Node<
-  { part: CircuitComponent; ledState?: boolean | null },
+  {
+    part: CircuitComponent;
+    ledState?: boolean | null;
+    buttonPressed?: boolean;
+    onButtonChange?: (pressed: boolean) => void;
+    onBootChange?: (pressed: boolean) => void;
+    onReset?: () => void;
+  },
   "part"
 >;
 
@@ -13,6 +21,15 @@ export type PartNode = Node<
 
 export function ComponentNode({ data, selected }: NodeProps<PartNode>) {
   const c = data.part;
+  if (c.kind === "yd-esp32-s3")
+    return (
+      <YdBoardNode
+        part={c}
+        selected={selected}
+        onBootChange={data.onBootChange}
+        onReset={data.onReset}
+      />
+    );
   const definition = catalog[c.kind];
   const junction = c.kind === "junction";
   return (
@@ -70,7 +87,23 @@ export function ComponentNode({ data, selected }: NodeProps<PartNode>) {
                 <i />
               </span>
             ) : (
-              <span className="switch-body" />
+              <button
+                className="switch-body nodrag"
+                aria-label={`Press button ${c.label}`}
+                aria-pressed={data.buttonPressed ?? false}
+                disabled={!data.onButtonChange}
+                onPointerDown={() => data.onButtonChange?.(true)}
+                onPointerUp={() => data.onButtonChange?.(false)}
+                onPointerLeave={() => data.onButtonChange?.(false)}
+                onKeyDown={(e) => {
+                  if (e.key === " " || e.key === "Enter") {
+                    e.preventDefault();
+                    data.onButtonChange?.(true);
+                  }
+                }}
+                onKeyUp={() => data.onButtonChange?.(false)}
+                onBlur={() => data.onButtonChange?.(false)}
+              />
             )}
           </div>
           <div className="pins">

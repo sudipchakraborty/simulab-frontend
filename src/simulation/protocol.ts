@@ -2,12 +2,15 @@
 import type { SignalProjection } from "./projection";
 import type { RuntimeSnapshot } from "@simulab/engine";
 /** @brief Stable browser transport; circuit schema and engine protocol version independently. */
-export const PROTOCOL_VERSION = "1.0.0" as const;
+export const PROTOCOL_VERSION = "1.1.0" as const;
 export type SimulationCommand = {
   version: typeof PROTOCOL_VERSION;
   id: number;
 } & (
   | { type: "load"; hex: string; project: CircuitProject }
+  | { type: "load-esp"; firmware: ArrayBuffer; project: CircuitProject }
+  | { type: "uart"; text: string }
+  | { type: "button"; componentId: string; pressed: boolean }
   | { type: "start" | "pause" | "resume" | "stop" | "reset" }
   | { type: "input"; pin: string; value: boolean }
 );

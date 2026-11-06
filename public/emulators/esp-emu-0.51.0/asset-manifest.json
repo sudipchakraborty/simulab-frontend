@@ -1,0 +1,52 @@
+{
+  "schemaVersion": "1.0.0",
+  "acquiredOn": "2026-11-05",
+  "emulator": {
+    "name": "espressif/esp-emulator",
+    "version": "0.51.0",
+    "tag": "v0.51.0",
+    "commit": "61d71cef2b1f13a936173c6d282a52c093137d6a",
+    "license": "Apache-2.0",
+    "url": "https://github.com/espressif/esp-emulator/releases/download/v0.51.0/esp-emu-0.51.0-wasm.tar.gz",
+    "archiveSha256": "b411ddf0faa7f213a991344ec0536801d8ea24f1d3dd6aa04be5b64a986e8d2a",
+    "digestOrigin": "Official GitHub release asset digest, matched locally",
+    "assets": [
+      {
+        "name": "esp_emu.js",
+        "bytes": 23082,
+        "sha256": "20ea33a0d75e7ee781356d7886ac0ce9e757da0d16ca57b26398c6663ec827d3"
+      },
+      {
+        "name": "esp_emu_bg.wasm",
+        "bytes": 4940328,
+        "sha256": "e72a6b02619ab6ed7e2347114cb2e2d497e9ac695a0300a4117dcda02d2fba0b"
+      }
+    ]
+  },
+  "firmware": [
+    {
+      "name": "ESP32_GENERIC_S3-20260824-v1.29.0.bin",
+      "url": "https://micropython.org/resources/firmware/ESP32_GENERIC_S3-20260824-v1.29.0.bin",
+      "bytes": 1783296,
+      "sha256": "1dd9dcd27ba2d6a1cb7f7b49a063f46d3d807d68b0151161233920228285e300",
+      "digestOrigin": "Locally computed acquisition digest; not a vendor signature",
+      "version": "MicroPython1.29.0",
+      "target": "ESP32-S3",
+      "format": "merged flash at address0, standard table0x8000/app0x10000",
+      "source": "https://github.com/micropython/micropython/tree/v1.29.0/ports/esp32",
+      "boardPage": "https://micropython.org/download/ESP32_GENERIC_S3/"
+    },
+    {
+      "name": "ESP32_GENERIC_S3-SPIRAM_OCT-20260824-v1.29.0.bin",
+      "url": "https://micropython.org/resources/firmware/ESP32_GENERIC_S3-SPIRAM_OCT-20260824-v1.29.0.bin",
+      "bytes": 1786704,
+      "sha256": "ab24eadfe3ef0e6ee38834d730e648def7cd82f3fa51ee0bbc59c29a6e1bd176",
+      "digestOrigin": "Locally computed acquisition digest; not a vendor signature",
+      "version": "MicroPython1.29.0",
+      "target": "ESP32-S3",
+      "format": "merged flash at address0, standard table0x8000/app0x10000",
+      "source": "https://github.com/micropython/micropython/tree/v1.29.0/ports/esp32",
+      "boardPage": "https://micropython.org/download/ESP32_GENERIC_S3/"
+    }
+  ]
+}

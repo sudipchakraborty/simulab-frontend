@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
+﻿import { useRef, useState } from "react";
 import { Upload, Play, Pause, Square, RotateCcw, Cpu } from "lucide-react";
 import type { SimulationController } from "./useSimulation";
-/** @brief Firmware controls consume a session controller, never execute instructions in React. */
+/** @brief Target-specific files and controls; instructions execute only in the owning Worker. */
 export function SimulationControls({
   simulation,
 }: {
@@ -9,47 +9,65 @@ export function SimulationControls({
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [fileError, setFileError] = useState("");
-  const { status, snapshot, firmwareName, error, command, load } = simulation;
-  const active = ["ready", "running", "paused", "stopped"].includes(status);
-  const budgetReached = (snapshot?.timeMicros ?? 0) >= 60_000_000;
+  const { status, target, snapshot, firmwareName, error, command, load } =
+    simulation;
+  const esp = target === "esp32s3",
+    supported = target === "uno" || esp,
+    active = ["ready", "running", "paused", "stopped"].includes(status),
+    budgetReached = (snapshot?.timeMicros ?? 0) >= 60_000_000;
   return (
     <section
       className="simulation-controls"
-      aria-label="AVR firmware execution"
+      aria-label="MCU firmware execution"
     >
       <div className="firmware-title">
         <Cpu size={17} />
         <div>
-          <strong>ATmega328P</strong>
-          <small>{firmwareName || "Compiled Intel HEX / 16 MHz"}</small>
+          <strong>
+            {esp
+              ? "ESP32-S3 / Xtensa LX7"
+              : target === "uno"
+                ? "ATmega328P"
+                : "One MCU per session"}
+          </strong>
+          <small>
+            {firmwareName ||
+              (esp
+                ? "Merged flash / memory profile unconfirmed"
+                : "Compiled Intel HEX /16MHz")}
+          </small>
         </div>
       </div>
       <div className="firmware-buttons">
         <button
+          disabled={status === "loading" || !supported}
           onClick={async () => {
             setFileError("");
             try {
-              const response = await fetch("/firmware/blink-uart.hex");
+              const file = esp ? "esp32s3-reference.bin" : "blink-uart.hex";
+              const response = await fetch("/firmware/" + file);
               if (!response.ok)
-                throw new Error("Compiled sample is unavailable.");
-              load(await response.text(), "blink-uart.hex");
+                throw new Error("Reference firmware unavailable.");
+              load(
+                esp ? await response.arrayBuffer() : await response.text(),
+                file,
+              );
             } catch (e) {
               setFileError(
-                e instanceof Error ? e.message : "Unable to load sample.",
+                e instanceof Error ? e.message : "Firmware load failed.",
               );
             }
           }}
-          disabled={status === "loading"}
         >
-          Load AVR sample
+          {esp ? "Load ESP32-S3 reference" : "Load AVR sample"}
         </button>
         <button
-          aria-label="Upload HEX firmware"
+          aria-label={esp ? "Upload ESP32-S3 firmware" : "Upload HEX firmware"}
+          disabled={status === "loading" || !supported}
           onClick={() => input.current?.click()}
-          disabled={status === "loading"}
         >
           <Upload size={13} />
-          <span>Upload HEX</span>
+          <span>{esp ? "Upload BIN" : "Upload HEX"}</span>
         </button>
         <span className="divider" />
         {status === "running" ? (
@@ -97,31 +115,37 @@ export function SimulationControls({
           {((snapshot?.timeMicros ?? 0) / 1e6).toFixed(3)} s
         </strong>
       </div>
-      {(error || fileError || budgetReached) && (
+      {(error || fileError || budgetReached || !supported) && (
         <div className="simulation-error" role="alert">
           {error ||
             fileError ||
-            "60-second simulation budget reached. Reset to run again."}
+            (budgetReached
+              ? "60-second simulation budget reached. Reset to run again."
+              : "Keep exactly one MCU board, or open the YD example. Multiple MCU execution is unsupported.")}
+        </div>
+      )}
+      {esp && (
+        <div className="simulation-capabilities">
+          GPIO/UART validated. RGB/I2C device hooks unavailable. Reference
+          firmware reports4MiB flash; fullN16R8 memory sizing is unverified.
         </div>
       )}
       <input
         ref={input}
         type="file"
-        aria-label="Firmware HEX file"
-        accept=".hex,text/plain"
+        aria-label={esp ? "Firmware merged flash file" : "Firmware HEX file"}
+        accept={esp ? ".bin,application/octet-stream" : ".hex,text/plain"}
         hidden
         onChange={async (e) => {
           const file = e.target.files?.[0];
           if (!file) return;
           setFileError("");
           try {
-            if (file.size > 131072)
-              throw new Error("Firmware exceeds 128 KiB limit.");
-            load(await file.text(), file.name);
-          } catch (error) {
-            setFileError(
-              error instanceof Error ? error.message : "Invalid firmware file.",
-            );
+            if (file.size > (esp ? 16 * 1024 * 1024 : 131072))
+              throw new Error("Firmware exceeds target size limit.");
+            load(esp ? await file.arrayBuffer() : await file.text(), file.name);
+          } catch (e) {
+            setFileError(e instanceof Error ? e.message : "Invalid firmware");
           }
           e.target.value = "";
         }}

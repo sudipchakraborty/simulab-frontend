@@ -1,4 +1,6 @@
-﻿# Emulator compatibility - Phase 2
+> Current MCU status is in MCU-COMPATIBILITY.md and ESP32-S3-TEST-REPORT.md. The AVR-only text below records the earlier Phase2 milestone; S3 is now separately validated with the documented limits.
+
+# Emulator compatibility - Phase 2
 
 ## Selected browser adapter
 

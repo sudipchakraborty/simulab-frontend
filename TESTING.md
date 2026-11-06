@@ -60,3 +60,9 @@ No physical board, Firefox/WebKit, UART electrical waveforms or unverified perip
 Frontend45/45, engine15/15, Chromium development8/8 and production-preview3/3 tests passed. Both builds and dependency audits passed (zero reported vulnerabilities). The Worker now owns CPU execution and digital net/LED evaluation; React displays snapshots. The visibility regression is fixed and asserts visible Uno/LED nodes while executing firmware.
 
 Run production checks with `npm.cmd run build` then `npm.cmd run test:e2e:production` (preview port5175). Development tests use5174. Hardware comparison remains pending; see EMULATOR_COMPATIBILITY.md for tested and unsupported capabilities.
+
+## Current0.3 final checks (2026-11-06)
+
+Frontend71, engine17 andESP adapter/binding5 tests pass. Development browser11 and production browser5 tests pass. Both builds/audits pass; audits report zero vulnerabilities. npm.cmd run verify:assets validates official assets, firmware and engine artifact integrity. See ESP32-S3-TEST-REPORT.md for individual gates and explicit blocked capabilities.
+
+The final suite additionally verifies normal BOOT/GPIO0 input and the on-board RST control. It does not validate download-mode strapping or externally wired EN. The manufacturer metric drawing is now verified at family level and the renderer/handles share that scale. Exact revision and memory profile confirmation remain open.

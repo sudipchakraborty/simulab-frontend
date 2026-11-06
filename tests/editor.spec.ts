@@ -174,13 +174,11 @@ test("visually crossing wires remain separate electrical nets after browser impo
       },
     ],
   };
-  await page
-    .getByLabel("Import circuit JSON")
-    .setInputFiles({
-      name: "crossings.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(fixture)),
-    });
+  await page.getByLabel("Import circuit JSON").setInputFiles({
+    name: "crossings.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(fixture)),
+  });
   await expect(
     page.getByText("Project imported. Electrical connectivity restored."),
   ).toBeVisible();

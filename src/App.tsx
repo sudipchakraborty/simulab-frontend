@@ -1,3 +1,4 @@
+import { GPIOStates } from "./simulation/GPIOStates";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
 import {
@@ -42,6 +43,8 @@ import { ComponentNode } from "./editor/ComponentNode";
 import { ComponentPalette } from "./editor/ComponentPalette";
 import { Inspector } from "./editor/Inspector";
 import { useSimulation } from "./simulation/useSimulation";
+import { UartInput } from "./simulation/UartInput";
+import { createYdExample } from "./circuit/yd-example";
 import { SimulationControls } from "./simulation/SimulationControls";
 
 import { useEditor } from "./editor/store";
@@ -52,7 +55,14 @@ const EMPTY_PROJECTION = {
   issues: [] as string[],
 };
 
-const kinds: ComponentKind[] = ["uno", "led", "resistor", "switch", "junction"];
+const kinds: ComponentKind[] = [
+  "uno",
+  "yd-esp32-s3",
+  "led",
+  "resistor",
+  "switch",
+  "junction",
+];
 
 /** @brief Phase 1 studio. Execution is deliberately unavailable until a real emulator adapter exists. */
 
@@ -104,9 +114,25 @@ export default function App() {
         data: {
           part: c,
           ledState: showingSignals ? projection.ledStates[c.id] : null,
+          buttonPressed: simulation.buttons[c.id],
+          onButtonChange:
+            simulation.target === "esp32s3" && showingSignals
+              ? (pressed: boolean) => simulation.setButton(c.id, pressed)
+              : undefined,
+          onBootChange:
+            simulation.target === "esp32s3" && showingSignals
+              ? (pressed: boolean) => simulation.input("GPIO0", !pressed)
+              : undefined,
+          onReset:
+            simulation.target === "esp32s3" && simulation.snapshot
+              ? () => simulation.command("reset")
+              : undefined,
         },
       })),
     [
+      simulation.target,
+      simulation.status,
+      simulation.buttons,
       project.components,
       draft,
       dimensions,
@@ -158,8 +184,14 @@ export default function App() {
       x: Math.round(p.x / 20) * 20,
       y: Math.round(p.y / 20) * 20,
     });
-    commit({ ...project, components: [...project.components, c] });
+    commit({
+      ...project,
+      schemaVersion: kind === "yd-esp32-s3" ? "1.1.0" : project.schemaVersion,
+      components: [...project.components, c],
+    });
     setSelected(c.id);
+    if (kind === "yd-esp32-s3")
+      setTimeout(() => flow.fitView({ padding: 0.15 }), 100);
   };
 
   const onConnect = (c: Connection) =>
@@ -246,7 +278,15 @@ export default function App() {
       </header>
 
       <div className="workspace">
-        <ComponentPalette onAdd={add} />
+        <ComponentPalette
+          onAdd={add}
+          onLoadYdExample={() => {
+            commit(createYdExample());
+            setSelected(undefined);
+            setDraft({});
+            setTimeout(() => flow.fitView({ padding: 0.15 }), 100);
+          }}
+        />
 
         <main className="studio">
           <div className="canvas-toolbar">
@@ -257,7 +297,7 @@ export default function App() {
               <div>
                 <strong>{project.name}</strong>
                 <small>
-                  Circuit design <span> </span> Phase 2 AVR integration
+                  Circuit design <span> </span> MCU circuit studio
                 </small>
               </div>
             </div>
@@ -275,7 +315,9 @@ export default function App() {
               <span className="divider" />
               <span className={`demo-badge ${showingSignals ? "genuine" : ""}`}>
                 {showingSignals
-                  ? "AVR EXECUTION"
+                  ? simulation.target === "esp32s3"
+                    ? "ESP32-S3 EXECUTION"
+                    : "AVR EXECUTION"
                   : simulation.status === "ready"
                     ? "FIRMWARE READY"
                     : "DEMO MODE"}
@@ -414,6 +456,12 @@ export default function App() {
               >
                 <SquareTerminal size={14} /> Serial monitor
               </button>
+              <button
+                className={tab === "gpio" ? "active" : ""}
+                onClick={() => setTab("gpio")}
+              >
+                GPIO states
+              </button>
               <span className="panel-state">
                 <span /> Editor ready
               </span>
@@ -455,6 +503,8 @@ export default function App() {
                     </div>
                   ))}
                 </div>
+              ) : tab === "gpio" ? (
+                <GPIOStates simulation={simulation} />
               ) : (
                 <div
                   className="serial-console"
@@ -462,9 +512,18 @@ export default function App() {
                   aria-label="Firmware UART output"
                 >
                   <div className="serial-heading">
-                    <SquareTerminal size={13} /> UART TX / 9600 sample baud{" "}
-                    <span>ATmega328P - CPU timestamped</span>
+                    <SquareTerminal size={13} /> UART /{" "}
+                    {simulation.target === "esp32s3"
+                      ? "ESP32-S3 guest console"
+                      : "9600 sample baud"}{" "}
+                    <span>
+                      {simulation.target === "esp32s3"
+                        ? "ESP32-S3 Xtensa LX7"
+                        : "ATmega328P"}{" "}
+                      - CPU timestamped
+                    </span>
                   </div>
+                  <UartInput simulation={simulation} />
                   {simulation.error ? (
                     <p role="alert">{simulation.error}</p>
                   ) : simulation.serial ? (
@@ -472,7 +531,7 @@ export default function App() {
                   ) : (
                     <p>
                       {simulation.status === "idle"
-                        ? "Load compiled AVR firmware to connect the serial monitor."
+                        ? "Load target-compatible firmware to connect the serial monitor."
                         : "Waiting for firmware UART output. No synthetic output is generated."}
                     </p>
                   )}
@@ -500,7 +559,7 @@ export default function App() {
           <span>{project.components.length} components</span>
           <span>{project.wires.length} wires</span>
           <span>{nets.length} nets</span>
-          <strong>SimuLab 0.2.0</strong>
+          <strong>SimuLab 0.3.0</strong>
         </div>
       </footer>
       <input

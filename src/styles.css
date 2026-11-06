@@ -1404,3 +1404,187 @@ h2 span {
     font-size: 9px;
   }
 }
+
+.board-details {
+  margin: 16px 0;
+  padding: 14px 0;
+  border-top: 1px solid #e2ebe6;
+}
+.board-details p {
+  font-size: 10px;
+  line-height: 1.8;
+  color: #6d8980;
+}
+.board-details select {
+  width: 100%;
+  padding: 8px 5px;
+  margin-top: 6px;
+  background: #fafcfb;
+  border: 1px solid #dce7e2;
+  border-radius: 4px;
+  color: #496d60;
+  font-size: 10px;
+}
+.board-details .board-confirmation {
+  font-size: 9px;
+  color: #a48748;
+}
+.board-details button {
+  font-size: 10px;
+  margin: 5px 0;
+}
+.board-details small {
+  font-size: 9px;
+  color: #8ca297;
+  line-height: 1.6;
+  display: block;
+}
+.palette-icon.yd-esp32-s3 {
+  background: #eef2f4;
+  color: #426a7a;
+}
+.palette-card:has(.yd-esp32-s3) strong {
+  font-size: 10px;
+  line-height: 1.5;
+}
+.yd-board-node .react-flow__handle:hover {
+  box-shadow: 0 0 0 6px #6ed6b955;
+}
+
+.uart-input {
+  margin: 8px 0 12px;
+}
+.uart-input form {
+  display: flex;
+  gap: 6px;
+}
+.uart-input input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #d9e7e1;
+  border-radius: 4px;
+  padding: 6px;
+  font: 10px monospace;
+}
+.uart-input button {
+  font-size: 9px;
+  padding: 5px 8px;
+}
+.uart-input > div {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 7px;
+}
+.uart-input span {
+  font:
+    8px "Segoe UI",
+    sans-serif;
+  color: #8a9e95;
+}
+.uart-input input:disabled {
+  background: #f6f8f7;
+}
+.yd-example {
+  font-size: 10px;
+  color: #347d6b;
+  margin: 15px 0;
+}
+.switch-body {
+  padding: 0;
+  display: block;
+}
+.switch-body[aria-pressed="true"] {
+  background: #397969;
+}
+.switch-body:disabled {
+  opacity: 1;
+  cursor: default;
+}
+.panel-content:has(.serial-console) {
+  padding-top: 8px;
+}
+.serial-console pre {
+  max-height: 160px;
+  overflow: auto;
+}
+.panel-tabs {
+  overflow-x: auto;
+  white-space: nowrap;
+}
+.board-confirmation {
+  line-height: 1.6;
+}
+.firmware-title small {
+  max-width: 185px;
+}
+.gpio-states {
+  display: flex;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+.gpio-states > p {
+  width: 100%;
+  font-size: 9px;
+  color: #8c9d94;
+  margin: 0 0 6px;
+}
+.gpio-states > div {
+  font-size: 9px;
+  padding: 7px;
+  border: 1px solid #e0eae4;
+  border-radius: 4px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.gpio-states strong {
+  font-family: monospace;
+  font-weight: 500;
+}
+.gpio-states .high {
+  color: #168865;
+}
+.gpio-states .low {
+  color: #a17153;
+}
+.gpio-states .hiz {
+  color: #8d9c99;
+}
+.bottom-panel:has(.serial-console) {
+  height: 260px;
+}
+.bottom-panel:has(.serial-console) .panel-content {
+  height: 216px;
+}
+.serial-console pre {
+  line-height: 1.45;
+  margin-top: 8px;
+  max-height: 130px;
+}
+.uart-input > div > span {
+  display: none;
+}
+@media (max-width: 560px) {
+  .bottom-panel:has(.serial-console) {
+    height: 245px;
+  }
+  .bottom-panel:has(.serial-console) .panel-content {
+    height: 200px;
+  }
+  .firmware-title small {
+    max-width: 125px;
+  }
+  .palette-help {
+    display: none;
+  }
+}
+.simulation-capabilities {
+  width: 100%;
+  font-size: 8px;
+  color: #8b8e6d;
+  line-height: 1.6;
+  border-top: 1px solid #e3ebe5;
+  padding-top: 6px;
+}

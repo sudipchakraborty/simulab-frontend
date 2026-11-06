@@ -1,3 +1,7 @@
 * text=auto eol=lf
 *.hex -text whitespace=cr-at-eol
 *.tgz binary
+
+*.wasm binary
+*.bin binary
+public/emulators/** -text whitespace=cr-at-eol

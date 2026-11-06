@@ -1,6 +1,6 @@
 {
   "name": "simulab-frontend",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -9,10 +9,11 @@
     "test": "vitest run",
     "test:e2e": "playwright test",
     "preview": "vite preview --host 127.0.0.1",
-    "test:e2e:production": "playwright test tests/simulation.spec.ts --config=playwright.production.config.ts"
+    "test:e2e:production": "playwright test tests/simulation.spec.ts tests/esp32-simulation.spec.ts --config=playwright.production.config.ts",
+    "verify:assets": "node scripts/verify-assets.mjs"
   },
   "dependencies": {
-    "@simulab/engine": "file:vendor/simulab-engine-0.2.0.tgz",
+    "@simulab/engine": "file:vendor/simulab-engine-0.3.0.tgz",
     "@xyflow/react": "^12.9.0",
     "lucide-react": "^0.468.0",
     "react": "^19.0.0",

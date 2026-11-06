@@ -12,19 +12,28 @@ import {
 } from "lucide-react";
 import { catalog } from "../circuit/catalog";
 import type { ComponentKind } from "../circuit/types";
-const kinds: ComponentKind[] = ["uno", "led", "resistor", "switch", "junction"];
+const kinds: ComponentKind[] = [
+  "uno",
+  "yd-esp32-s3",
+  "led",
+  "resistor",
+  "switch",
+  "junction",
+];
 /** @brief Reusable palette emits component kind; host controls placement and persistence. */
 export function ComponentPalette({
   onAdd,
+  onLoadYdExample,
 }: {
   onAdd: (kind: ComponentKind) => void;
+  onLoadYdExample?: () => void;
 }) {
   const [query, setQuery] = useState("");
   return (
     <aside className="palette">
       <div className="section-kicker">BUILD YOUR CIRCUIT</div>
       <h2>
-        Components <span>05</span>
+        Components <span>06</span>
       </h2>
       <label className="search">
         <Search size={16} />
@@ -36,7 +45,7 @@ export function ComponentPalette({
         />
         <kbd>/</kbd>
       </label>
-      <div className="palette-category">CORE COMPONENTS</div>
+      <div className="palette-category">MICROCONTROLLERS & COMPONENTS</div>
       {kinds
         .filter((k) =>
           catalog[k].name.toLowerCase().includes(query.toLowerCase()),
@@ -53,7 +62,7 @@ export function ComponentPalette({
             title="Drag to canvas or click to add"
           >
             <span className={`palette-icon ${kind}`}>
-              {kind === "uno" ? (
+              {kind === "uno" || kind === "yd-esp32-s3" ? (
                 <Cpu size={25} />
               ) : kind === "led" ? (
                 <Lightbulb size={23} />
@@ -70,18 +79,23 @@ export function ComponentPalette({
               <small>
                 {kind === "uno"
                   ? "ATmega328P   16 MHz"
-                  : kind === "led"
-                    ? "Indicator   2 pins"
-                    : kind === "resistor"
-                      ? "Passive   2 pins"
-                      : kind === "switch"
-                        ? "Input   2 pins"
-                        : "Explicit electrical node"}
+                  : kind === "yd-esp32-s3"
+                    ? "Xtensa LX7 / 44 pins"
+                    : kind === "led"
+                      ? "Indicator   2 pins"
+                      : kind === "resistor"
+                        ? "Passive   2 pins"
+                        : kind === "switch"
+                          ? "Input   2 pins"
+                          : "Explicit electrical node"}
               </small>
             </span>
             <Plus size={15} />
           </button>
         ))}
+      <button className="yd-example" onClick={onLoadYdExample}>
+        Open YD GPIO4 example
+      </button>
       <div className="palette-help">
         <span className="tiny-label">A PLACE TO EXPERIMENT</span>
         <h3>Start with a connection.</h3>

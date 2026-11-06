@@ -45,3 +45,11 @@ No sibling repository edits, remotes, commits/pushes, purchases or deployments w
 Compiled sample assets are under public/firmware/. They originate from engine/firmware C+ELF+HEX with compiler/archive hashes in metadata.json. Rebuild with the engine's scripts/setup-avr-toolchain.ps1 and scripts/build-firmware.mjs if needed; the compiler stays local/ignored. WSL is optional for an existing compatible avr-gcc toolchain; it is not required for this browser adapter.
 
 The dev server pre-bundles the engine and avr8js to prevent first-use Worker imports from triggering a full-page dependency reload. Browser acceptance uses port5174, separate from normal interactive port5173. A production build emits a separate Worker asset.
+
+## Current ESP32-S3 setup
+
+The current engine artifact is vendor/simulab-engine-0.3.0.tgz. Earlier artifacts remain for history. Official0.51.0 JS/WASM/license and the MicroPython reference image are included locally, so running the app needs no ESP-IDF install or backend.
+
+For engine tests, run node esp32/setup-assets.mjs in that repository; it validates pinned hashes and downloads only to ignored local cache. Then run build/test/test:esp32/test:esp32:firmware. No system installs are performed. Standard MCU lifecycle methods coexist with the old UnoRuntime API.
+
+Custom ESP-IDF packaging steps, standard-offset constraints, N16R8 limits and unverified Arduino/PlatformIO compatibility are in ESP32-S3-FIRMWARE.md. Project snapshots do not preserve firmware/runtime/flash modifications.

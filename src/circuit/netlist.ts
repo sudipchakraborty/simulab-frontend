@@ -1,3 +1,4 @@
+import { ydBoard } from "../boards/yd-esp32-s3";
 import { catalog } from "./catalog";
 import type { CircuitProject, Endpoint } from "./types";
 /** @brief Unambiguous endpoint key; component and pin identity define connectivity. */
@@ -20,6 +21,20 @@ export function buildNets(
       endpoints.set(k, endpoint);
       adjacency.set(k, new Set());
     }
+  // Board-declared shared rails connect independent physical pads, never visual crossings.
+  for (const component of project.components.filter(
+    (c) => c.kind === "yd-esp32-s3",
+  )) {
+    for (const group of ydBoard.internalNets) {
+      const keys = group.pinIds.map((pinId) =>
+        endpointKey({ componentId: component.id, pinId }),
+      );
+      for (const key of keys.slice(1)) {
+        adjacency.get(keys[0])!.add(key);
+        adjacency.get(key)!.add(keys[0]);
+      }
+    }
+  }
   for (const w of project.wires) {
     const a = endpointKey(w.from),
       b = endpointKey(w.to);
@@ -64,7 +79,7 @@ export function validateCircuit(
     if (net.endpoints.length === 1) {
       const e = net.endpoints[0];
       const c = project.components.find((c) => c.id === e.componentId)!;
-      if (c.kind !== "uno")
+      if (c.kind !== "uno" && c.kind !== "yd-esp32-s3")
         issues.push({
           severity: "warning",
           message: `${c.label}.${e.pinId} is unconnected.`,
@@ -79,8 +94,18 @@ export function validateCircuit(
         severity: "error",
         message: `${net.id}: direct power-to-ground short.`,
       });
-    const rails = net.endpoints.filter((e) => ["5V", "3V3"].includes(e.pinId));
-    if (new Set(rails.map((e) => e.pinId)).size > 1)
+    const rails = net.endpoints
+      .map((e) => {
+        const component = project.components.find(
+          (c) => c.id === e.componentId,
+        )!;
+        return catalog[component.kind].pins.find((p) => p.id === e.pinId)!;
+      })
+      .filter(
+        (pin) =>
+          pin.electricalType === "power" && ["5V", "3V3"].includes(pin.label),
+      );
+    if (new Set(rails.map((pin) => pin.label)).size > 1)
       issues.push({
         severity: "error",
         message: `${net.id}: incompatible power rails connected.`,

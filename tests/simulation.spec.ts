@@ -3,13 +3,11 @@ import { readFileSync } from "node:fs";
 const fixture = (name: string) =>
   readFileSync(new URL(`../public/firmware/${name}.hex`, import.meta.url));
 async function upload(page: Page, name: string) {
-  await page
-    .getByLabel("Firmware HEX file")
-    .setInputFiles({
-      name: `${name}.hex`,
-      mimeType: "text/plain",
-      buffer: fixture(name),
-    });
+  await page.getByLabel("Firmware HEX file").setInputFiles({
+    name: `${name}.hex`,
+    mimeType: "text/plain",
+    buffer: fixture(name),
+  });
   await expect(page.getByTestId("simulation-status")).toHaveText("ready");
 }
 async function exportProject(page: Page) {
@@ -101,13 +99,11 @@ test("different compiled pin output only lights a correctly rewired LED", async 
     (w: any) => w.from.componentId === "uno-1" && w.from.pinId === "D13",
   );
   driver.from.pinId = "D12";
-  await page
-    .getByLabel("Import circuit JSON")
-    .setInputFiles({
-      name: "d12.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(project)),
-    });
+  await page.getByLabel("Import circuit JSON").setInputFiles({
+    name: "d12.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(project)),
+  });
   await expect(page.getByTestId("simulation-status")).toHaveText("idle");
   await upload(page, "alternate-d12");
   await page
@@ -123,13 +119,11 @@ test("malformed HEX produces an explicit error without fake execution", async ({
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByLabel("Firmware HEX file")
-    .setInputFiles({
-      name: "bad.hex",
-      mimeType: "text/plain",
-      buffer: Buffer.from(":02000000000000\n:00000001FF"),
-    });
+  await page.getByLabel("Firmware HEX file").setInputFiles({
+    name: "bad.hex",
+    mimeType: "text/plain",
+    buffer: Buffer.from(":02000000000000\n:00000001FF"),
+  });
   await expect(page.getByTestId("simulation-status")).toHaveText("error");
   await expect(page.getByRole("alert")).toContainText("checksum");
   await expect(

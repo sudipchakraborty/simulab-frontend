@@ -18,3 +18,7 @@ Next task: evaluate real AVR emulator licenses, firmware formats, execution envi
 ## Phase 2 status
 
 Browser AVR integration implemented and tested with compiled fixtures. Hardware comparison remains pending. Timer0/2, PWM, advanced buses/ADC and live circuit inputs need their own compatibility tests before support claims. Phase3 ESP32-S3 investigation has not started. Backend and commercial milestones remain untouched.
+
+## S3 milestone update
+
+YD board graphics/metadata and genuine S3 ROM/firmware boot, GPIO output, wired input and UART are implemented and tested. ExactV1.3 physical confirmation/fullN16R8 sizing, WS2812 waveform integration and externalI2C/DS1307 remain open gates. They are not claimed complete by the board appearing in the editor. Backend/commercial phases remain untouched.

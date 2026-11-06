@@ -1,29 +1,30 @@
-﻿# SimuLab frontend
+# SimuLab circuit studio
 
-Modular React circuit studio with real AVR firmware execution in an isolated browser Worker. Phase1 circuit editing remains available without firmware. Phase2 integrates ATmega328P instruction execution using pinned AVR8js0.21.1 through independently packaged `@simulab/engine`0.2.0.
+React/TypeScript circuit editor with real ArduinoUno and ESP32-S3 firmware execution in separate browser Workers. Current frontend/engine version0.3.0. Board graphics, CPU execution and peripheral support are reported separately.
 
 ## Run on Windows11
 
-Install Node.js24 LTS and open this repository in VS Code:
+Install Node.js24 and open this repository in VSCode:
 
 ```powershell
-cd D:\PROJECTS\Simulab\simulab-frontend
 npm.cmd ci
 npm.cmd run dev
 ```
 
-Open http://127.0.0.1:5173/ . No backend, WSL, Docker or compiler installation is needed to run checked-in firmware samples. The versioned engine tarball under vendor/ and compiled HEX under public/firmware/ are included; there are no sibling source imports. Custom firmware must be compiled externally for ATmega328P/16MHz and uploaded as Intel HEX. Compiler setup/rebuild instructions are in the independent engine repository.
+Open http://127.0.0.1:5173/ . No backend, WSL, native compiler or cloud service is required for the supplied reference firmware. Versioned engine tarballs, pinnedWASM/license and referenceHEX/BIN assets are included. Custom firmware is compiled externally.
 
-## Circuit and firmware workflow
+## Use
 
-1. Drag components onto the grid. Click two pins or drag between them to connect; common pins accept multiple wires.
-2. Double-click a wire for an explicit junction. Geometric crossings never connect electrically.
-3. Use Open/Export for circuit JSON and inspector/undo/redo for edits.
-4. Click **Load AVR sample**, then **Start simulation**. The sample executes actual Timer1 interrupt firmware and toggles D13 every250ms of simulation time.
-5. Open **Serial monitor** for firmware-generated UART output. Pause/resume/stop/reset controls operate the CPU session. Reset clears CPU time/output; start reruns the loaded firmware.
-6. Upload another compatible HEX with **Upload HEX**. Editing circuit topology/properties unloads execution; reload firmware for the changed circuit.
+- Uno: load AVR sample, Start simulation, then Serial monitor. Existing pin/wire/junction/history/export/import behavior remains available.
+- YD: **Open YD GPIO4 example**, **Load ESP32-S3 reference**, **Start simulation**, then **Serial monitor**. Wait for MicroPython REPL; use **Send GPIO4 blink program** and **Send GPIO5 button monitor**. These programs execute inside real guest firmware on the emulated Xtensa cores. Hold SW1 to drive the wired input; inspect GPIO states for observed outputs.
+- Drag components, connect named pins, rotate the YD board from Inspector, and export/import circuitJSON. Crossed wires do not connect without explicit endpoints/junctions. Circuit edits unload the owning firmware session.
+- Exactly one MCU may run per circuit. Wrong binary target/format and unavailable operations produce errors; no alternate MCU or synthetic output is substituted.
 
-DEMO MODE means no firmware execution. AVR EXECUTION appears only while a genuine engine session is running or paused. LED rendering follows actual GPIO through explicit wires/resistors, with a simplified digital model rather than analog accuracy. Sample binaries and their provenance are under public/firmware/.
+## Verified and limited
+
+The YD model exposes44 headers with manufacturer-family metadata. ExactV1.3 revision and installed module marking require confirmation; manufacturer-family dimensions are verified. RGB usesGPIO48 in manufacturer documentation; its waveform simulation and DS1307/I2C device attachment remain unsupported. Reference firmware reports4MiB flash; fullN16R8 memory sizing is not supported by an exported browser control. No physical hardware/analog accuracy claim.
+
+See [MCU compatibility](MCU-COMPATIBILITY.md), [board](ESP32-S3-BOARD.md), [emulator](ESP32-S3-EMULATOR.md), [firmware](ESP32-S3-FIRMWARE.md), [test report](ESP32-S3-TEST-REPORT.md) and [progress](progress.md). Engine0.3 preserves the original UnoRuntime and adds an explicit common facade/S3 adapter.
 
 ## Verify
 
@@ -32,13 +33,8 @@ npm.cmd test
 npm.cmd run build
 npx.cmd playwright install chromium
 npm.cmd run test:e2e
+npm.cmd run test:e2e:production
 npm.cmd audit
 ```
 
-Browser tests use isolated port5174. See TESTING.md for actual results and limits, DEVELOPMENT.md for setup, ARCHITECTURE.md for boundaries and progress.md for handoff. All required project docs remain present.
-
-## Limits and next gate
-
-Physical hardware comparison remains pending. No Mega/ESP32, in-app compilation, cloud persistence, accounts, payments, analog solver or mechanical simulation. Rotation rendering/manual wire segment editing remain deferred. Browser input to MCU through interactive buttons and advanced peripherals need dedicated integration tests. See EMULATOR_COMPATIBILITY.md before loading arbitrary sketches.
-
-Final Phase2 checks: frontend45 unit/component tests, engine15 tests, Chromium8 development and3 production firmware checks passed. Both builds passed and audits reported zero vulnerabilities. Physical hardware comparison remains pending.
+Development browser tests use5174 and production preview tests5175, separate from interactive5173. Build before production tests. See TESTING.md for actual results. No accounts, payments, compilation service, mechanical simulation or deployment is included.

@@ -1,5 +1,6 @@
 /** @file Version 1 portable circuit contract; coordinates never imply connectivity. */
-export type ComponentKind = "uno" | "led" | "resistor" | "switch" | "junction";
+export type ComponentKind =
+  "uno" | "yd-esp32-s3" | "led" | "resistor" | "switch" | "junction";
 export interface Point {
   x: number;
   y: number;
@@ -24,7 +25,7 @@ export interface Wire {
   label: string;
 }
 export interface CircuitProject {
-  schemaVersion: "1.0.0";
+  schemaVersion: "1.0.0" | "1.1.0";
   name: string;
   components: CircuitComponent[];
   wires: Wire[];

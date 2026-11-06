@@ -1,3 +1,4 @@
+import { ydBoard } from "../boards/yd-esp32-s3";
 import type {
   ComponentDefinition,
   ComponentKind,
@@ -32,6 +33,20 @@ export const catalog: Record<ComponentKind, ComponentDefinition> = {
     defaultProperties: { clockHz: 16000000 },
   },
 
+  "yd-esp32-s3": {
+    name: "YD-ESP32-S3-2022-V1.3",
+    description:
+      "44 physical pins / ESP32-S3 / exact revision and module marking require confirmation",
+    pins: ydBoard.pins.map((p) => ({
+      id: p.id,
+      label: p.label,
+      electricalType: p.electricalType,
+    })),
+    defaultProperties: {
+      memoryVariant: "unconfirmed",
+      boardRevision: "2022-V1.3",
+    },
+  },
   led: {
     name: "LED",
     description: "Polarized indicator   A anode / K cathode",

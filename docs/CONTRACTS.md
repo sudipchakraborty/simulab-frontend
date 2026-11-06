@@ -58,3 +58,7 @@ Circuit JSON is not firmware. Future firmware acceptance requires binary validat
 ## Implemented engine boundary
 
 Phase2 now implements a subset of the future engine interfaces through independent `@simulab/engine`0.2.0 and Worker protocol1.0.0. See SIMULATION_CONTRACT.md, PHASE2_PLAN.md and EMULATOR_COMPATIBILITY.md. Future registry/bus/mechanical interfaces remain design requirements rather than current capability claims.
+
+## Circuit1.1 / Worker1.1 compatibility
+
+Circuit1.1 adds YD physical terminal IDs;1.0 Uno projects retain import/export compatibility. New readers reject YD documents mislabeled1.0. Worker1.1 carries ESP merged binary, UART RX and momentary-contact commands; both client and Worker assets must be upgraded together. Engine0.3 keeps UnoRuntime compatible and adds target-explicit standard and S3 interfaces. Physical/header/nativeGPIO/Arduino-generic numeric aliases remain separate concepts; no AVR alias conversion exists.

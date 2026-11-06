@@ -1,3 +1,4 @@
+import { BoardDetails } from "./BoardDetails";
 import { Cpu, Info, MousePointer2, Trash2 } from "lucide-react";
 import { catalog } from "../circuit/catalog";
 import type { CircuitComponent, CircuitProject } from "../circuit/types";
@@ -98,26 +99,35 @@ export function Inspector({
                 <input value={part.position.y} readOnly />
               </label>
             </div>
-            {part.rotation !== 0 && (
+            {part.kind === "yd-esp32-s3" && (
+              <BoardDetails part={part} onChange={updatePart} />
+            )}
+            {part.kind !== "yd-esp32-s3" && part.rotation !== 0 && (
               <p className="muted">
                 Rotation metadata: {part.rotation} degrees (visual rotation
                 unavailable in Phase 1)
               </p>
             )}
-            {Object.entries(part.properties).map(([key, value]) => (
-              <label key={key}>
-                {key}
-                <input
-                  aria-label={`Property ${key}`}
-                  maxLength={1000}
-                  type={typeof value === "number" ? "number" : "text"}
-                  value={String(value)}
-                  onChange={(event) =>
-                    updateProperty(key, value, event.target.value)
-                  }
-                />
-              </label>
-            ))}
+            {Object.entries(part.properties)
+              .filter(
+                ([key]) =>
+                  part.kind !== "yd-esp32-s3" ||
+                  !["memoryVariant", "boardRevision"].includes(key),
+              )
+              .map(([key, value]) => (
+                <label key={key}>
+                  {key}
+                  <input
+                    aria-label={`Property ${key}`}
+                    maxLength={1000}
+                    type={typeof value === "number" ? "number" : "text"}
+                    value={String(value)}
+                    onChange={(event) =>
+                      updateProperty(key, value, event.target.value)
+                    }
+                  />
+                </label>
+              ))}
           </div>
           <div className="property-section">
             <h4>PIN REFERENCE</h4>

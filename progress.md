@@ -89,3 +89,38 @@ Evaluate real AVR emulator licenses, toolchains, firmware formats, host/browser 
 - Added .gitattributes so firmware HEX and engine tarball bytes remain unchanged across checkout platforms; text source defaults to LF.
 - Reviewed outgoing tracked/untracked paths; node_modules, dist, browser reports and local compiler downloads are excluded.
 - This release includes Phase1 editor and Phase2 real AVR Worker integration with documented hardware/peripheral limitations. Remote synchronization is verified separately after push.
+
+## 2026-11-05 - YD board Phase A validation
+- Added manufacturer-sourced44-terminal YD metadata, stable P1/P2 physical IDs, GPIO metadata and module restrictions; exactV1.3 revision/memory/dimensions remain clearly marked for confirmation.
+- Added separate SVG board renderer and rotation-aware handle geometry; integrated palette, inspector, explicit shared-rail netlist aliases and schema1.1 (old1.0 Uno import/export preserved).
+- Build passed and9 Chromium tests passed, including44 pins, tooltipGPIOidentity, shared pin connections, rotation and JSON roundtrip plus all8 existing editor/Uno browser regressions.
+- PhaseA acceptance gate passed for implemented graphics/pinout behaviors; unknown hardware details are not claimed verified. Genuine ESP32-S3 boot validation may now begin.
+
+## 2026-11-05 - ESP32-S3 real execution evidence
+- PhaseA build/frontend62 tests/9 Chromium tests passed before any firmware instruction execution.
+- Pinned Espressif ESP Emulator0.51.0 (Apache-2.0) archive SHA256 matched official release digest; JS/WASM assets and notices are mirrored locally for reproducibility.
+- Official MicroPython1.29.0 Octal-SPIRAM merged image genuinely booted through ESP32-S3 ROM and reached UART REPL; boot-report.json records actual15219369 cycles and guest output. Two Xtensa harts are reported after boot.
+- Genuine guest Pin/Timer execution produced GPIO4 HIGH/LOW, GPIO5 input0/1 and sampled timer transitions approximately248810us apart (requested250ms). gpio-report.json records UART and cycle evidence.
+- Browser tests verified real boot, firmware-origin LED through resistor/net, UART RX/TX, actual wired momentary button input, pause/reset, visible board and explicit rejection of AVR HEX; no AVR Worker requests.
+- Engine0.3.0 adds a shared injectable MCU facade and a separateS3 adapter while keeping UnoRuntime unchanged. Budget units are explicit (AVR cycles vsS3 instructions).
+- External I2C/RMT/WS2812 device callbacks are not exported by this browser binding. RGB/DS1307 remain blocked; no fabricated peripheral output.
+- ExactV1.3 schematic, physical module marking/N16R8 capacity and PCB dimensions require confirmation. Browser flash/PSRAM size overrides are not available. No hardware parity claim.
+
+## Final verification - 2026-11-06
+- Frontend build passed;71/71 frontend tests passed.
+- Engine build passed;17/17 engine tests and5/5 ESP adapter/binding checks passed, with real boot/GPIO firmware scripts also passing (not contract doubles).
+- Chromium development suite11/11 passed, including existingUno, wire snapping/shared nodes/junctions/crossings/JSON and newS3 boot/LED/UART/SW1/BOOT/RST. Production preview suite5/5 passed against the built Worker assets.
+- Both dependency audits report zero vulnerabilities. verify:assets validates pinned officialJS/WASM, MicroPython image, all AVR fixtures and engine tarball SHA512 against lockfile.
+- Final browser test inspected genuine firmware output and explicitly observed no AVR Worker on theS3 path. Screenshot of the running metric-based board and GPIO monitor visually reviewed.
+- Manufacturer metric PDF was rendered/read:27.94mm width,63.39mm overall height,57.15mm PCB height,2.54mm header pitch,53.34mm row span,25.40mm column spacing. Updated metadata and shared SVG/handle geometry at10units/mm. ExactV1.3 still unconfirmed.
+- Fixed metadata-based power rail checking, retained legacyUno error semantics, and disambiguated UART test selectors. Source code review completed; tests prove no pin/architecture substitution.
+- Required ESP32 board/emulator/firmware/test-report/MCU-compatibility documents created. Current acceptance: graphics/pinout, firmware boot, GPIO output/input and UART validated; RGB/DS1307 hooks unavailable; fullN16R8 sizing unverified (reference reports4MiB flash/~8.3MB free guest heap).
+- Interactive frontend returnedHTTP200 on127.0.0.1:5173. Backend unchanged. No commits/pushes/deployments performed for this task.
+
+## Commit and push preparation - 2026-11-06
+- User explicitly authorized commit/push of pending simulator changes. Target is existing origin/main.
+- Fresh frontend build,71 tests and verify:assets passed. Engine build,17 tests,5 adapter checks and genuineS3 boot/GPIO scripts passed separately.
+- Release includes metric44-pin YD board, strict physical/native pin metadata, rotation and wiring, real ESP32-S3 WASM firmware execution, GPIO/UART/input controls, shared MCU facade and documented acceptance gates.
+- RGB/DS1307 interfaces, fullN16R8 sizing and exact board-revision confirmation remain explicitly open. Backend has no changes.
+- Compiler/download/PDF-analysis caches, node_modules, dist and browser reports remain excluded. Firmware and emulator byte integrity is protected in Git attributes and checked from staged blobs before commit.
+- Remote synchronization will be verified separately after pushing frontend and engine.

@@ -51,3 +51,11 @@ Compiled firmware and integrity/provenance metadata are browser-local assets. Co
 AVR8js is an existing JavaScript emulator, so this adapter is TypeScript rather than Rust/WASM. Future shared Rust components can implement the same published protocol without introducing React/Node dependencies into the engine.
 
 Component net/LED evaluation is executed inside the Worker together with MCU snapshots. React receives already-projected LED states and diagnostics. This keeps both MCU and component simulation off the rendering thread.
+
+## YD/S3 architecture extension
+
+Circuit schema1.1.0 introduces stable physical YD header IDs and board-declared internal rails while retaining1.0.0 Uno documents. src/boards validates manufacturer-family metadata separately from engine capabilities; src/editor/YdBoardNode renders SVG and rotation-aware attachment geometry. Exact hardware details left unverified remain explicit fields, not invented constants.
+
+Engine0.3.0 exports its source-compatible UnoRuntime plus a generic facade and dedicated ./esp32 adapter. The frontend chooses a target-specific Worker through simulation/targets. The AVR Worker retains its instruction execution path; the S3 Worker injects pinned officialJS/WASM bindings and loads real merged flash. Both return common timestamped snapshots and run net/component projection off the rendering thread. UART/contact events use protocol1.1.0. User code is never parsed to fabricate CPU signals.
+
+The S3 reference is genuine MicroPython/ESP-IDF firmware. Sample UART programs execute inside its guest VM on the Xtensa emulator. buttonInputs derives ideal contact levels from explicit nets and runtime-only contact state. GPIO4 LED state follows actual output-enable/level snapshots. RGB and externalI2C are separate missing interfaces, not implied by GPIO success. Reset reloads originalflash, and circuit edits terminate execution.
