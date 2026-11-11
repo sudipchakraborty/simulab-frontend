@@ -185,3 +185,94 @@ describe("isolated simulation sessions", () => {
     expect(result.current.serial).toBe("");
   });
 });
+
+it("mock Worker auto-start waits for ready once and Stop cancels pending readiness", () => {
+  const project = createSampleProject();
+  const { result } = renderHook(() => useSimulation(project));
+  act(() => result.current.load("hex", "design.hex", { autoStart: true }));
+  const first = FakeWorker.instances[0];
+  expect(
+    first.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(0);
+  act(() =>
+    first.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }),
+  );
+  act(() =>
+    first.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }),
+  );
+  expect(
+    first.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(1);
+  act(() => result.current.load("hex", "second.hex", { autoStart: true }));
+  const second = FakeWorker.instances[1];
+  act(() => result.current.command("stop"));
+  act(() =>
+    second.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }),
+  );
+  expect(
+    second.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(0);
+});
+
+it("mock S3 Worker asynchronous readiness starts once; superseded and error sessions never start", () => {
+  const project = createYdExample();
+  const { result } = renderHook(() => useSimulation(project));
+  act(() =>
+    result.current.load(new ArrayBuffer(65568), "first.merged.bin", {
+      autoStart: true,
+    }),
+  );
+  const old = FakeWorker.instances[0];
+  expect(
+    old.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(0);
+  act(() =>
+    result.current.load(new ArrayBuffer(65568), "second.merged.bin", {
+      autoStart: true,
+    }),
+  );
+  const next = FakeWorker.instances[1];
+  act(() => old.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }));
+  expect(
+    old.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(0);
+  act(() => next.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }));
+  expect(
+    next.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(1);
+  act(() =>
+    result.current.load(new ArrayBuffer(65568), "broken.merged.bin", {
+      autoStart: true,
+    }),
+  );
+  const broken = FakeWorker.instances[2];
+  act(() =>
+    broken.emit({
+      version: "1.1.0",
+      type: "error",
+      message: "initialization failed",
+    }),
+  );
+  act(() =>
+    broken.emit({ version: "1.1.0", type: "snapshot", snapshot: ready }),
+  );
+  expect(
+    broken.postMessage.mock.calls.filter(([m]) => m.type === "start"),
+  ).toHaveLength(0);
+});
+
+it("mock Worker load identity advances even for same-name loading and invalid attempts", () => {
+  const project = createSampleProject();
+  const { result } = renderHook(() => useSimulation(project));
+  let first: number | undefined, second: number | undefined;
+  act(() => {
+    first = result.current.load("hex", "same.hex");
+  });
+  act(() => {
+    second = result.current.load("different hex", "same.hex");
+  });
+  expect(second).toBe((first ?? 0) + 1);
+  expect(result.current.loadSession).toBe(second);
+  act(() => result.current.load(new ArrayBuffer(1), "same.hex"));
+  expect(result.current.loadSession).toBe((second ?? 0) + 1);
+});

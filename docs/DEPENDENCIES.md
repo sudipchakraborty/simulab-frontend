@@ -24,3 +24,7 @@ Current0.3 dependencies. Review upstream/transitive notices before commercial re
 | zustand | 5.0.16 | MIT |
 | Official Espressif ESP-EMU JS/WASM |0.51.0 | Apache-2.0; full license served with assets |
 | MicroPython reference image |1.29.0 | MIT with upstream/ESP-IDF bundled-component notices; see supplied license and upstream source |
+
+## IDE additions
+
+Monaco Editor0.56.0 (MIT) is lazy-loaded with local worker/language assets. DOMPurify is overridden to3.4.17 to remove the transitive sanitizer advisories observed during installation. Current exact versions and integrity are in package-lock.json; run npm.cmd audit for the current dependency audit. The account backend uses Nodemailer (exact version pinned in its package-lock.json) for SMTP; its HTTP, crypto and SQLite services use Node24 built-ins. Local Arduino CLI/core packages are downloaded into ignored caches with upstream licenses, not republished with the application.

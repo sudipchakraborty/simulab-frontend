@@ -5,3 +5,6 @@
 *.wasm binary
 *.bin binary
 public/emulators/** -text whitespace=cr-at-eol
+
+# Preserve exact compiler-fixture source bytes used by SHA-256 provenance.
+*.c -text whitespace=cr-at-eol

@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page } from "./fixtures";
 async function pin(page: Page, id: string) {
   const p = page.getByTestId(id);
   await expect(p).toBeVisible();

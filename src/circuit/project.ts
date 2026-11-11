@@ -1,3 +1,4 @@
+import { validateModelProperties } from "../models/parameters";
 import { catalog, createComponent } from "./catalog";
 import { connect } from "./editing";
 import { endpointKey, hasEndpoint } from "./netlist";
@@ -37,8 +38,10 @@ const endpoint = (v: unknown): Endpoint => {
 export function parseProject(json: string): CircuitProject {
   if (json.length > 2_000_000) fail("file exceeds 2 MB character limit.");
   const root = object(JSON.parse(json));
-  if (root.schemaVersion !== "1.0.0" && root.schemaVersion !== "1.1.0")
-    fail("unsupported schema version; expected 1.0.0 or 1.1.0.");
+  if (
+    !["1.0.0", "1.1.0", "1.2.0", "1.3.0"].includes(String(root.schemaVersion))
+  )
+    fail("unsupported schema version; expected 1.0.0, 1.1.0, 1.2.0 or 1.3.0.");
   if (
     !Array.isArray(root.components) ||
     root.components.length > 1000 ||
@@ -55,8 +58,38 @@ export function parseProject(json: string): CircuitProject {
       ids.add(componentId);
       const kind = text(c.kind) as ComponentKind;
       if (!Object.hasOwn(catalog, kind)) fail("unknown component type.");
-      if (kind === "yd-esp32-s3" && root.schemaVersion !== "1.1.0")
+      if (kind === "yd-esp32-s3" && root.schemaVersion === "1.0.0")
         fail("YD board requires circuit schema 1.1.0.");
+      if (
+        [
+          "ds3231",
+          "mux4067",
+          "dc-motor",
+          "ws2812",
+          "relay",
+          "h-bridge",
+        ].includes(kind) &&
+        !["1.2.0", "1.3.0"].includes(String(root.schemaVersion))
+      )
+        fail("Device models require schema 1.2.0.");
+      if (
+        ![
+          "uno",
+          "yd-esp32-s3",
+          "led",
+          "resistor",
+          "switch",
+          "junction",
+          "ds3231",
+          "mux4067",
+          "dc-motor",
+          "ws2812",
+          "relay",
+          "h-bridge",
+        ].includes(kind) &&
+        root.schemaVersion !== "1.3.0"
+      )
+        fail("Expanded models require schema 1.3.0.");
       const position = object(c.position);
       const props = object(c.properties);
       if (Object.keys(props).length > 50) fail("too many properties.");
@@ -77,6 +110,7 @@ export function parseProject(json: string): CircuitProject {
           properties[key] = value;
         else fail("invalid property value.");
       }
+      validateModelProperties(kind, properties);
       if (
         typeof c.rotation !== "number" ||
         ![0, 90, 180, 270].includes(c.rotation)
@@ -165,4 +199,14 @@ export function createSampleProject(): CircuitProject {
       { componentId: b, pinId: bp },
     );
   return p;
+}
+
+/** @brief Create an empty portable design without inserting demo components or firmware. */
+export function createBlankProject(): CircuitProject {
+  return {
+    schemaVersion: "1.3.0",
+    name: "Untitled circuit",
+    components: [],
+    wires: [],
+  };
 }

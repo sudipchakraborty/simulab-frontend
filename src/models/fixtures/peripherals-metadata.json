@@ -1,0 +1,20 @@
+{
+  "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+  "command": [
+    "avr-gcc",
+    "-mmcu=atmega328p",
+    "-DF_CPU=16000000UL",
+    "-std=gnu11",
+    "-Os",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-o",
+    "firmware/peripherals.elf",
+    "firmware/peripherals.c"
+  ],
+  "sourceSha256": "34fbe936092aef35a4c0bce32e062218a7769ed8cfb21096e915ddd02019ce0c",
+  "elfSha256": "96518bbcfbc0d4a7a7ae74ec0c98b055f8a80f277b6e31c19edf5efe7d86df89",
+  "hexSha256": "fd66e827aa99e65fa6077a1ef22a06a8f6546e5ec3a319dcdde99ee60d1f13da",
+  "hardwareComparison": "not performed"
+}

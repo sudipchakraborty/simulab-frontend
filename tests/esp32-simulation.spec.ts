@@ -1,4 +1,4 @@
-﻿import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 test("official ESP32-S3 WASM boots real firmware, drives circuit LED, and reads wired button", async ({
   page,
 }) => {

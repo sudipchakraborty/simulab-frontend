@@ -66,3 +66,14 @@ Run production checks with `npm.cmd run build` then `npm.cmd run test:e2e:produc
 Frontend71, engine17 andESP adapter/binding5 tests pass. Development browser11 and production browser5 tests pass. Both builds/audits pass; audits report zero vulnerabilities. npm.cmd run verify:assets validates official assets, firmware and engine artifact integrity. See ESP32-S3-TEST-REPORT.md for individual gates and explicit blocked capabilities.
 
 The final suite additionally verifies normal BOOT/GPIO0 input and the on-board RST control. It does not validate download-mode strapping or externally wired EN. The manufacturer metric drawing is now verified at family level and the renderer/handles share that scale. Exact revision and memory profile confirmation remain open.
+
+## Accounts and expanded components (0.5, 2026-11-06)
+140 frontend tests,21 engine tests,5 ESP binding tests and10 backend tests passed. Build and hashes passed. Current account-aware Playwright runs use isolated real APIs: dev5184/4321, production5185/4322. Tests use explicit local outboxes; no real email/charges. Set SIMULAB_TEST_TOKEN for the started real companion and SIMULAB_S3_IMAGE for the precompiled merged S3 artifact to execute optional compiler gates. Those jobs run with one worker because the companion intentionally admits one compilation at a time. See docs/ACCOUNTS_COMPONENTS_REPORT.md for current evidence and boundaries.
+
+Final milestone0.5 production gate:21/21 passed (no skips), including native Nano/Mega debugging, actual CLI Uno build/run, compiled Arduino S3 and all3 real account flows.
+
+## Group editing and Hardware compile/run (2026-11-10)
+Final unit168/168 (36 files), strict TypeScript/Vite build and full production Chromium32/32 passed, no skips. Run used the real paired local Arduino CLI companion and actual precompiled Arduino S3 merged image for optional gates. New cases cover rectangle/subgraph copy/group move/delete/undo, saved arrow-key movement, blank project plus code reset/confirmation, real current-source compile-to-Worker auto-run, Pause/Resume/Stop/error handling and manual same-filename firmware independence. Existing engine executable hashes remain verified; no physical upload was performed. See progress.md and the approved selection-new-compile-run plan for review fixes and boundaries.
+
+## Release verification on resource-constrained Windows hosts
+The CPU-only sensor-firmware integration test runs in Vitest's Node environment; it uses no DOM. This avoids jsdom overhead while keeping its original20-second guard and exact HX711/DHT22 byte assertions. If the workstation is under heavy load, run the full suite serially with `npm.cmd test -- --maxWorkers=1`. C firmware source fixtures use Git `-text` attributes so recorded byte hashes survive checkout; source/HEX/ELF provenance is intentional release content, not a runtime cache.

@@ -1,7 +1,9 @@
+import { validateModelProperties, parameterBounds } from "../models/parameters";
 import { BoardDetails } from "./BoardDetails";
 import { Cpu, Info, MousePointer2, Trash2 } from "lucide-react";
 import { catalog } from "../circuit/catalog";
 import type { CircuitComponent, CircuitProject } from "../circuit/types";
+import type { ModelSnapshot } from "../models/contract";
 
 /** @brief Host-supplied document and callbacks keep the inspector independent of editor state. */
 export interface InspectorProps {
@@ -10,6 +12,7 @@ export interface InspectorProps {
   commit: (project: CircuitProject) => void;
   onDelete: () => void;
   onNotice: (message: string) => void;
+  deviceStates?: Record<string, ModelSnapshot>;
 }
 
 /** @brief Edit selected component or wire metadata within the circuit JSON contract limits.
@@ -21,6 +24,7 @@ export function Inspector({
   commit,
   onDelete,
   onNotice,
+  deviceStates,
 }: InspectorProps) {
   const part = project.components.find(
     (component) => component.id === selected,
@@ -56,7 +60,16 @@ export function Inspector({
       onNotice("Property must be a finite number within +/- 1e12.");
       return;
     }
-    updatePart({ properties: { ...part.properties, [key]: value } });
+    const properties = { ...part.properties, [key]: value };
+    try {
+      validateModelProperties(part.kind, properties);
+    } catch (error) {
+      onNotice(
+        error instanceof Error ? error.message : "Invalid model parameter",
+      );
+      return;
+    }
+    updatePart({ properties });
   };
 
   return (
@@ -73,8 +86,29 @@ export function Inspector({
             </span>
             <h3>{catalog[part.kind].name}</h3>
             <p>{part.label}</p>
+            <p>{catalog[part.kind].description}</p>
           </div>
           <div className="property-section">
+            {deviceStates?.[part.id] && (
+              <>
+                <h4>LIVE MODEL STATE</h4>
+                <dl>
+                  {Object.entries(deviceStates[part.id].values).map(
+                    ([key, v]) => (
+                      <div key={key}>
+                        <dt>{key}</dt>
+                        <dd>{String(v)}</dd>
+                      </div>
+                    ),
+                  )}
+                </dl>
+                {deviceStates[part.id].warnings.map((w) => (
+                  <p key={w} className="model-warning">
+                    {w}
+                  </p>
+                ))}
+              </>
+            )}
             <h4>COMPONENT</h4>
             <label>
               Reference
@@ -119,6 +153,9 @@ export function Inspector({
                   {key}
                   <input
                     aria-label={`Property ${key}`}
+                    min={parameterBounds[key]?.[0]}
+                    max={parameterBounds[key]?.[1]}
+                    step="any"
                     maxLength={1000}
                     type={typeof value === "number" ? "number" : "text"}
                     value={String(value)}
@@ -207,7 +244,7 @@ export function Inspector({
           Worker.
         </p>
         <div>
-          <Info size={13} /> No analog accuracy claimed
+          <Info size={13} /> Bounded resistive DC; educational mechanics
         </div>
       </div>
     </aside>

@@ -11,6 +11,7 @@ export type SimulationCommand = {
   | { type: "load-esp"; firmware: ArrayBuffer; project: CircuitProject }
   | { type: "uart"; text: string }
   | { type: "button"; componentId: string; pressed: boolean }
+  | { type: "step" }
   | { type: "start" | "pause" | "resume" | "stop" | "reset" }
   | { type: "input"; pin: string; value: boolean }
 );

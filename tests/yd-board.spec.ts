@@ -1,4 +1,4 @@
-﻿import { test, expect } from "@playwright/test";
+import { test, expect } from "./fixtures";
 const board = {
   id: "yd-1",
   kind: "yd-esp32-s3",

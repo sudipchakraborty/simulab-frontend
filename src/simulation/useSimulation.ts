@@ -15,6 +15,9 @@ export function useSimulation(project: CircuitProject) {
   const currentProject = useRef(project);
   currentProject.current = project;
   const worker = useRef<Worker | undefined>(undefined);
+  const loadSequence = useRef(0);
+  const [loadSession, setLoadSession] = useState(0);
+  const autoStart = useRef(false);
   const generation = useRef(0),
     sequence = useRef(0),
     heartbeat = useRef(0);
@@ -33,6 +36,7 @@ export function useSimulation(project: CircuitProject) {
   };
   const terminate = useCallback(() => {
     generation.current++;
+    autoStart.current = false;
     worker.current?.terminate();
     worker.current = undefined;
   }, []);
@@ -64,8 +68,15 @@ export function useSimulation(project: CircuitProject) {
     }, 1000);
     return () => clearInterval(timer);
   }, [terminate]);
+  /** @brief Load target firmware; optional execution waits for this Worker session to report ready. @returns Monotonic identity for every load attempt, including rejection. */
   const load = useCallback(
-    (firmware: string | ArrayBuffer, name: string) => {
+    (
+      firmware: string | ArrayBuffer,
+      name: string,
+      options?: { autoStart?: boolean },
+    ): number | undefined => {
+      const loadId = ++loadSequence.current;
+      setLoadSession(loadId);
       terminate();
       setSnapshot(undefined);
       setProjection(undefined);
@@ -81,14 +92,15 @@ export function useSimulation(project: CircuitProject) {
         reject(
           "Execution requires exactly one MCU board. Remove extra boards or open a single-board example.",
         );
-        return;
+        return loadId;
       }
       if (
-        selected === "uno" &&
-        (typeof firmware !== "string" || firmware.length > 131072)
+        ["uno", "nano", "mega2560"].includes(selected) &&
+        (typeof firmware !== "string" ||
+          firmware.length > (selected === "mega2560" ? 1048576 : 131072))
       ) {
-        reject("Uno requires Intel HEX text below128KiB.");
-        return;
+        reject("AVR requires target-compatible Intel HEX text.");
+        return loadId;
       }
       if (
         selected === "esp32s3" &&
@@ -98,8 +110,9 @@ export function useSimulation(project: CircuitProject) {
         reject(
           "ESP32-S3 requires a merged flash binary below16MiB; AVR HEX is incompatible.",
         );
-        return;
+        return loadId;
       }
+      autoStart.current = options?.autoStart === true;
       updateStatus("loading");
       setFirmwareName(name);
       heartbeat.current = Date.now();
@@ -132,6 +145,14 @@ export function useSimulation(project: CircuitProject) {
           setProjection(message.projection);
           setSerial((s) => (s + message.snapshot.serial).slice(-16384));
           updateStatus(message.snapshot.state);
+          if (autoStart.current && message.snapshot.state === "ready") {
+            autoStart.current = false;
+            next.postMessage({
+              version: PROTOCOL_VERSION,
+              id: ++sequence.current,
+              type: "start",
+            });
+          }
         };
         next.onerror = (event) => {
           if (session !== generation.current) return;
@@ -152,6 +173,7 @@ export function useSimulation(project: CircuitProject) {
         terminate();
         reject(e instanceof Error ? e.message : "Worker unavailable.");
       }
+      return loadId;
     },
     [terminate],
   );
@@ -162,6 +184,8 @@ export function useSimulation(project: CircuitProject) {
       id: ++sequence.current,
     });
   const command = (type: "start" | "pause" | "resume" | "stop" | "reset") => {
+    if (type === "stop" || type === "pause" || type === "reset")
+      autoStart.current = false;
     if (type === "reset") {
       setSerial("");
       setError("");
@@ -170,10 +194,6 @@ export function useSimulation(project: CircuitProject) {
     post({ type });
   };
   const sendUART = (text: string) => {
-    if (target !== "esp32s3") {
-      setError("UART RX is unavailable for this adapter.");
-      return;
-    }
     if (new TextEncoder().encode(text).length > 4095) {
       setError("UART command exceeds4095 bytes.");
       return;
@@ -194,7 +214,7 @@ export function useSimulation(project: CircuitProject) {
       value,
     } satisfies SimulationCommand);
   const setButton = (componentId: string, pressed: boolean) => {
-    if (target !== "esp32s3" || !worker.current) return;
+    if (!worker.current) return;
     setButtons((s) => ({ ...s, [componentId]: pressed }));
     worker.current.postMessage({
       version: PROTOCOL_VERSION,
@@ -206,6 +226,7 @@ export function useSimulation(project: CircuitProject) {
   };
   return {
     status,
+    loadSession,
     target,
     snapshot,
     projection,
@@ -218,6 +239,8 @@ export function useSimulation(project: CircuitProject) {
     sendUART,
     input,
     setButton,
+    clearSerial: () => setSerial(""),
+    step: () => post({ type: "step" }),
   };
 }
 export type SimulationController = ReturnType<typeof useSimulation>;

@@ -1,0 +1,37 @@
+import {test,expect} from './fixtures';
+test('main tabs preserve hardware, unsaved multifile code, viewport and serial session',async({page})=>{
+ test.setTimeout(90000);
+ const errors:string[]=[];page.on('pageerror',e=>errors.push(e.message));
+ await page.goto('/');await page.getByRole('button',{name:'Load AVR sample',exact:true}).click();
+ await expect(page.getByTestId('simulation-status')).toHaveText('ready');
+ await page.getByRole('button',{name:'Start simulation',exact:true}).click();
+ await expect(page.getByTestId('simulation-status')).toHaveText('running');
+ const transform=await page.locator('.react-flow__viewport').getAttribute('style');
+ await page.getByRole('tab',{name:'Code Editor',exact:true}).click();
+ await expect(page.locator('.monaco-editor')).toBeVisible({timeout:30000});
+ await page.getByLabel('New source filename').fill('helper.h');await page.getByRole('button',{name:'Add file',exact:true}).click();
+ await expect(page.getByRole('tab',{name:'helper.h',exact:true})).toHaveAttribute('aria-selected','true');
+ await page.locator('.monaco-editor .view-lines').click();await page.keyboard.type('// preserved header');
+ await expect(page.locator('.monaco-editor')).toContainText('preserved header');
+ await page.getByRole('tab',{name:'Debugger',exact:true}).click();
+ await expect(page.getByRole('button',{name:'Step Into',exact:true})).toBeDisabled();
+ await page.getByRole('tab',{name:'Serial Monitor',exact:true}).click();
+ await expect(page.getByTestId('ide-serial-output')).toContainText('SIMULAB AVR READY',{timeout:15000});
+ await page.getByRole('tab',{name:'Hardware',exact:true}).click();
+ await expect(page.getByTestId('part-uno-1')).toBeVisible();
+ expect(await page.locator('.react-flow__viewport').getAttribute('style')).toBe(transform);
+ await expect(page.getByTestId('simulation-status')).toHaveText('running');
+ await page.getByRole('tab',{name:'Code Editor',exact:true}).click();
+ await expect(page.locator('.monaco-editor')).toContainText('preserved header');
+ const pending=page.waitForEvent('download');await page.getByRole('button',{name:'Save Project',exact:true}).click();
+ const stream=await(await pending).createReadStream();let json='';for await(const c of stream!)json+=c.toString();
+ const w=JSON.parse(json);expect(w.files.find((f:{name:string})=>f.name==='helper.h').content).toContain('preserved header');
+ expect(w.circuit.components).toHaveLength(4);expect(errors).toEqual([]);
+});
+test('new component library exposes functional models and schema 1.3',async({page})=>{
+ await page.goto('/');await page.getByRole('button',{name:'DS3231 RTC',exact:false}).click();
+ await expect(page.getByLabel('Property address')).toHaveValue('104');
+ const pending=page.waitForEvent('download');await page.getByRole('button',{name:'Export project',exact:true}).click();
+ const stream=await(await pending).createReadStream();let json='';for await(const c of stream!)json+=c.toString();
+ expect(JSON.parse(json).schemaVersion).toBe('1.3.0');
+});

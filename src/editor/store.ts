@@ -6,6 +6,7 @@ interface EditorStore {
   past: CircuitProject[];
   future: CircuitProject[];
   commit: (p: CircuitProject) => void;
+  reset: (project: CircuitProject) => void;
   undo: () => void;
   redo: () => void;
 }
@@ -20,6 +21,8 @@ export const useEditor = create<EditorStore>((set) => ({
       past: [...s.past.slice(-99), s.project],
       future: [],
     })),
+  /** @brief Replace the document and clear history only after host confirmation. */
+  reset: (project) => set({ project, past: [], future: [] }),
   undo: () =>
     set((s) =>
       s.past.length

@@ -5,3 +5,7 @@ const manifest=json('public/emulators/esp-emu-0.51.0/asset-manifest.json');for(c
 const image=manifest.firmware.find(f=>f.name.includes('SPIRAM_OCT'));if(sha(bytes('public/firmware/esp32s3-reference.bin'))!==image.sha256)throw new Error('ESP32-S3 reference firmware hash mismatch');
 for(const firmware of json('public/firmware/metadata.json').fixtures){if(sha(bytes('public/firmware/'+firmware.name+'.hex'))!==firmware.hexSha256)throw new Error('AVR fixture hash mismatch: '+firmware.name);}
 const pkg=json('package.json'),lock=json('package-lock.json');const local=pkg.dependencies['@simulab/engine'];if(!/^file:vendor\/simulab-engine-[\d.]+\.tgz$/.test(local))throw new Error('Expected a versioned local engine artifact');const integrity='sha512-'+createHash('sha512').update(bytes(local.slice(5))).digest('base64');if(integrity!==lock.packages['node_modules/@simulab/engine'].integrity)throw new Error('Engine tarball integrity mismatch');console.log('Verified official JS/WASM, ESP32-S3 image, all AVR HEX fixtures and engine artifact lockfile integrity.');
+
+for (const name of ['peripherals','dynamic-mux']) {const metadata=json('src/models/fixtures/'+name+'-metadata.json');if(sha(bytes('src/models/fixtures/'+name+'.hex'))!==metadata.hexSha256)throw new Error('Test firmware integrity mismatch: '+name);}
+
+if(sha(bytes('public/firmware/mega2560.hex'))!==json('public/firmware/mega2560-metadata.json').hexSha256)throw new Error('Mega2560 firmware integrity mismatch');

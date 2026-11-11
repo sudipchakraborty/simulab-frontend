@@ -1,12 +1,23 @@
+import { isMcuKind } from "../circuit/boardRegistry";
 import { ydBoard, supportsGPIOOutput } from "../boards/yd-esp32-s3";
 import { catalog } from "../circuit/catalog";
 import { endpointKey } from "../circuit/netlist";
 import type { CircuitProject, Endpoint } from "../circuit/types";
+import type { ModelSnapshot } from "../models/contract";
 
 /** @brief A behavioral digital display result, never a voltage/current solution. */
 export interface SignalProjection {
   ledStates: Record<string, boolean | null>;
   issues: string[];
+  components?: Record<string, ModelSnapshot>;
+  debug?: { pcBytes: number; sp: number; sreg: number; registers: number[] };
+  i2c?: {
+    timeUs: number;
+    address: number;
+    direction: string;
+    bytes: number[];
+    ack: boolean;
+  }[];
 }
 
 /** @brief Project actual MCU output levels onto a circuit's explicit endpoints.
@@ -29,13 +40,13 @@ export function projectSignals(
     ),
     issues: [],
   };
-  const boards = project.components.filter(
-    (c) => c.kind === "uno" || c.kind === "yd-esp32-s3",
-  );
+  const boards = project.components.filter((c) => isMcuKind(c.kind));
   if (boards.length !== 1) {
     if (project.components.length)
       result.issues.push(
-        boards.every(c=>c.kind==="uno")?"Exactly one Arduino Uno is supported for digital signal projection.":"Exactly one supported MCU board is required for digital signal projection.",
+        boards.every((c) => c.kind === "uno")
+          ? "Exactly one Arduino Uno is supported for digital signal projection."
+          : "Exactly one supported MCU board is required for digital signal projection.",
       );
     return result;
   }
@@ -89,6 +100,21 @@ export function projectSignals(
           `Resistor ${component.label} needs a positive finite resistance; its digital path is open.`,
         );
     }
+    if (component.kind === "tactile-switch") {
+      union(
+        { componentId: component.id, pinId: "1A" },
+        { componentId: component.id, pinId: "1B" },
+      );
+      union(
+        { componentId: component.id, pinId: "2A" },
+        { componentId: component.id, pinId: "2B" },
+      );
+      if (component.properties.pressed === true)
+        union(
+          { componentId: component.id, pinId: "1A" },
+          { componentId: component.id, pinId: "2A" },
+        );
+    }
     if (component.kind === "switch" && component.properties.pressed === true)
       union(
         { componentId: component.id, pinId: "1" },
@@ -113,11 +139,15 @@ export function projectSignals(
     if (!drivers.has(net)) drivers.set(net, new Set());
     drivers.get(net)!.add(value);
   };
-  if (board.kind === "uno") {
+  if (board.kind !== "yd-esp32-s3") {
     drive("5V", 1);
     drive("GND", 0);
-    for (const pin of catalog.uno.pins) {
-      if (!/^(D(?:[0-9]|1[0-3])|A[0-5])$/.test(pin.id)) continue;
+    for (const pin of catalog[board.kind].pins) {
+      if (
+        !/^(D\d+|A\d+)$/.test(pin.id) ||
+        pin.electricalType === "adc-only-unimplemented"
+      )
+        continue;
       const level = gpio[pin.id];
       if (level === 0 || level === 1) drive(pin.id, level);
     }

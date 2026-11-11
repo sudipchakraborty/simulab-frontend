@@ -1,6 +1,36 @@
 /** @file Version 1 portable circuit contract; coordinates never imply connectivity. */
 export type ComponentKind =
-  "uno" | "yd-esp32-s3" | "led" | "resistor" | "switch" | "junction";
+  | "uno"
+  | "yd-esp32-s3"
+  | "led"
+  | "resistor"
+  | "switch"
+  | "junction"
+  | "ds3231"
+  | "mux4067"
+  | "dc-motor"
+  | "ws2812"
+  | "relay"
+  | "h-bridge"
+  | "nano"
+  | "mega2560"
+  | "voltmeter"
+  | "ammeter"
+  | "hx711"
+  | "dht22"
+  | "stepper"
+  | "stepper-driver"
+  | "servo"
+  | "tactile-switch"
+  | "electromagnetic-switch"
+  | "arm-6dof"
+  | "universal-arm"
+  | "dobot-magician"
+  | "uarm-metal"
+  | "conveyor"
+  | "robotic-car"
+  | "ir-emitter"
+  | "ir-detector";
 export interface Point {
   x: number;
   y: number;
@@ -25,7 +55,7 @@ export interface Wire {
   label: string;
 }
 export interface CircuitProject {
-  schemaVersion: "1.0.0" | "1.1.0";
+  schemaVersion: "1.0.0" | "1.1.0" | "1.2.0" | "1.3.0";
   name: string;
   components: CircuitComponent[];
   wires: Wire[];

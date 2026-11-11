@@ -4,10 +4,13 @@ import { Handle, Position, type NodeProps, type Node } from "@xyflow/react";
 import { catalog } from "../circuit/catalog";
 
 import type { CircuitComponent } from "../circuit/types";
+import { DeviceVisual } from "./DeviceVisual";
+import type { ModelSnapshot } from "../models/contract";
 
 export type PartNode = Node<
   {
     part: CircuitComponent;
+    deviceState?: ModelSnapshot;
     ledState?: boolean | null;
     buttonPressed?: boolean;
     onButtonChange?: (pressed: boolean) => void;
@@ -32,9 +35,28 @@ export function ComponentNode({ data, selected }: NodeProps<PartNode>) {
     );
   const definition = catalog[c.kind];
   const junction = c.kind === "junction";
+  const device = ![
+    "uno",
+    "led",
+    "resistor",
+    "switch",
+    "tactile-switch",
+    "junction",
+  ].includes(c.kind);
   return (
     <div
       className={`part part-${c.kind} ${selected ? "selected" : ""}`}
+      style={
+        device
+          ? {
+              minHeight: Math.max(
+                205,
+                90 + Math.ceil(catalog[c.kind].pins.length / 2) * 20,
+              ),
+              width: 235,
+            }
+          : undefined
+      }
       data-testid={`part-${c.id}`}
       data-led-state={
         c.kind === "led"
@@ -66,7 +88,9 @@ export function ComponentNode({ data, selected }: NodeProps<PartNode>) {
             </span>
           </div>
           <div className="part-art">
-            {c.kind === "uno" ? (
+            {device ? (
+              <DeviceVisual part={c} state={data.deviceState} />
+            ) : c.kind === "uno" ? (
               <>
                 <span className="usb-port" />
                 <span className="board-logo">
@@ -113,7 +137,7 @@ export function ComponentNode({ data, selected }: NodeProps<PartNode>) {
               return (
                 <div
                   key={pin.id}
-                  className={`pin-label ${left ? "left" : "right"}`}
+                  className={`pin-label ${left ? "left" : "right"} ${c.kind === "mux4067" && pin.id === `C${data.deviceState?.values.channel}` ? "active-channel" : ""}`}
                   style={{ top: 67 + row * 20 }}
                 >
                   <Handle

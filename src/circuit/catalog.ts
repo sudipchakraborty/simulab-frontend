@@ -1,4 +1,7 @@
+import { expandedDefinitions } from "../models/expandedDefinitions";
+import { boardPins } from "./boardRegistry";
 import { ydBoard } from "../boards/yd-esp32-s3";
+import { deviceDefinitions } from "../models/definitions";
 import type {
   ComponentDefinition,
   ComponentKind,
@@ -15,9 +18,28 @@ const pin = (id: string, electricalType = "passive") => ({
 /** @brief Reusable definitions only; none of these components execute MCU instructions. */
 
 export const catalog: Record<ComponentKind, ComponentDefinition> = {
+  ...(deviceDefinitions as Record<
+    "ds3231" | "mux4067" | "dc-motor" | "ws2812" | "relay" | "h-bridge",
+    ComponentDefinition
+  >),
+  ...expandedDefinitions,
+  nano: {
+    name: "Arduino Nano classic",
+    description:
+      "ATmega328P 16 MHz; A6/A7 ADC-only, analog conversion not implemented",
+    pins: boardPins("nano"),
+    defaultProperties: { clockHz: 16000000 },
+  },
+  mega2560: {
+    name: "Arduino Mega 2560",
+    description:
+      "ATmega2560 16 MHz; native D0..53/A0..15; host requires separate Mega CPU profile",
+    pins: boardPins("mega2560"),
+    defaultProperties: { clockHz: 16000000 },
+  },
   uno: {
     name: "Arduino Uno",
-    description: "ATmega328P board   firmware execution unavailable in Phase 1",
+    description: "ATmega328P board / genuine AVR instruction execution",
     pins: [
       ...Array.from({ length: 14 }, (_, i) => pin(`D${i}`, "bidirectional")),
 
@@ -56,14 +78,14 @@ export const catalog: Record<ComponentKind, ComponentDefinition> = {
 
   resistor: {
     name: "Resistor",
-    description: "Passive resistor   no analog solver",
+    description: "Linear DC resistor; bounded resistive network solution",
     pins: [pin("1"), pin("2")],
     defaultProperties: { resistanceOhms: 220 },
   },
 
   switch: {
     name: "Push button",
-    description: "Normally open switch   editable state metadata",
+    description: "Normally open switch / live digital contact input",
     pins: [pin("1"), pin("2")],
     defaultProperties: { pressed: false },
   },

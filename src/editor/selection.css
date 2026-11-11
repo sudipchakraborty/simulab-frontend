@@ -1,0 +1,130 @@
+﻿.selection-toolbar,
+.design-run-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+}
+.selection-toolbar button,
+.design-run-controls button {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  min-height: 29px;
+  font-size: 11px;
+  border: 1px solid var(--border);
+  background: var(--surface-raised);
+  color: var(--text);
+}
+.selection-toolbar button:hover,
+.design-run-controls button:hover {
+  background: var(--surface-hover);
+}
+.selection-toolbar > span {
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: auto;
+}
+.design-run-controls .run-code {
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-weight: 700;
+}
+.design-run-controls .pair-compiler {
+  color: var(--accent);
+}
+.design-run-controls small {
+  font-size: 10px;
+  color: var(--muted);
+  margin-left: 6px;
+}
+.design-confirm {
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+  max-width: min(460px, calc(100vw - 32px));
+}
+.design-confirm::backdrop {
+  background: #020a16a8;
+}
+.design-confirm h2 {
+  font-size: 19px;
+  margin: 0 0 12px;
+}
+.design-confirm p {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.design-confirm > div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+.design-confirm button {
+  padding: 9px 13px;
+  background: var(--surface-raised);
+  color: var(--text);
+  border-color: var(--border);
+}
+.design-confirm .danger {
+  color: var(--danger);
+}
+.selection-inspector {
+  padding: 20px;
+  overflow: auto;
+  color: var(--text);
+}
+.selection-inspector h2 {
+  font-size: 17px;
+}
+.selection-inspector p {
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+.react-flow__selection,
+.react-flow__nodesselection-rect {
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  border: 1px solid var(--accent);
+}
+#panel-hardware .canvas:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: -2px;
+}
+.design-build-log {
+  margin: 0;
+  white-space: pre-wrap;
+  font:
+    11px/1.6 Consolas,
+    monospace;
+  color: var(--text);
+}
+@media (max-width: 650px) {
+  .selection-toolbar,
+  .design-run-controls {
+    gap: 4px;
+    padding: 5px 8px;
+  }
+  .selection-toolbar button,
+  .design-run-controls button {
+    font-size: 10px;
+    padding: 5px;
+  }
+  .selection-toolbar > span {
+    flex-basis: 100%;
+  }
+  .design-run-controls small {
+    display: none;
+  }
+}

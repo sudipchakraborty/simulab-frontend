@@ -1,0 +1,399 @@
+/* Semantic application surfaces. Hardware artwork, signals and wire colours are intentionally independent. */
+:root,
+:root[data-theme="corporate-navy"] {
+  --bg: #0c1626;
+  --surface: #122238;
+  --surface-raised: #1a2e48;
+  --surface-hover: #223d59;
+  --canvas: #0e1c2e;
+  --border: #344c66;
+  --text: #e5edf7;
+  --muted: #adbed2;
+  --accent: #63d8c5;
+  --accent-soft: #183e46;
+  --accent-ink: #082e30;
+  --focus: #80baff;
+  --warning: #f1ca7c;
+  --danger: #ffaba5;
+  --header: #091322;
+  --shadow: 0 12px 32px #0004;
+  color-scheme: dark;
+}
+:root[data-theme="midnight"] {
+  --bg: #090e1b;
+  --surface: #111a2c;
+  --surface-raised: #1b2840;
+  --surface-hover: #293751;
+  --canvas: #0b1323;
+  --border: #354561;
+  --text: #edf0ff;
+  --muted: #b3bfd8;
+  --accent: #a4b7ff;
+  --accent-soft: #293654;
+  --accent-ink: #16203c;
+  --focus: #b4c4ff;
+  --header: #080c17;
+}
+:root[data-theme="graphite"] {
+  --bg: #171b20;
+  --surface: #20262d;
+  --surface-raised: #2b333d;
+  --surface-hover: #38434e;
+  --canvas: #1b2027;
+  --border: #4a5663;
+  --text: #edf2f6;
+  --muted: #bdc8d2;
+  --accent: #7edbcd;
+  --accent-soft: #284740;
+  --accent-ink: #112e29;
+  --focus: #97c8ff;
+  --header: #12161b;
+}
+:root[data-theme="corporate-light"],
+:root[data-theme="pearl"],
+:root[data-theme="sand"] {
+  --bg: #e9eff5;
+  --surface: #f9fbfe;
+  --surface-raised: #eaf1f8;
+  --surface-hover: #dce8f3;
+  --canvas: #e5edf5;
+  --border: #b7c7d7;
+  --text: #172d45;
+  --muted: #4f647a;
+  --accent: #096b63;
+  --accent-soft: #d9eeeb;
+  --accent-ink: #ffffff;
+  --focus: #155da4;
+  --warning: #805511;
+  --danger: #a33131;
+  --header: #e0eaf4;
+  --shadow: 0 12px 32px #1936531a;
+  color-scheme: light;
+}
+:root[data-theme="pearl"] {
+  --bg: #eceef3;
+  --surface: #fcfcff;
+  --surface-raised: #eff0f8;
+  --surface-hover: #e2e5f1;
+  --canvas: #e9ecf4;
+  --border: #c1c6d8;
+  --text: #2b3049;
+  --muted: #5c627b;
+  --accent: #5059a2;
+  --accent-soft: #e5e7f7;
+  --focus: #555bb0;
+  --header: #e5e8f2;
+}
+:root[data-theme="sand"] {
+  --bg: #eee9df;
+  --surface: #fcfaf5;
+  --surface-raised: #f0eade;
+  --surface-hover: #e6dfd1;
+  --canvas: #eae4d9;
+  --border: #c8bcaa;
+  --text: #36352e;
+  --muted: #696252;
+  --accent: #346859;
+  --accent-soft: #dfebe0;
+  --focus: #426d91;
+  --header: #e5ded0;
+}
+:root {
+  color: var(--text);
+  background: var(--bg);
+  --xy-background-color: var(--canvas);
+  --xy-background-pattern-dots-color: var(--border);
+}
+body,
+.app,
+.workspace,
+.ide-main {
+  color: var(--text);
+  background: var(--bg);
+}
+button,
+input,
+select,
+textarea {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border);
+}
+button:hover {
+  background: var(--surface-hover);
+  border-color: var(--focus);
+}
+button:disabled {
+  opacity: 0.5;
+}
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+.topbar,
+.main-tabs,
+.source-tabs {
+  background: var(--header);
+  color: var(--muted);
+  border-color: var(--border);
+}
+.brand,
+.breadcrumb strong {
+  color: var(--text);
+}
+.brand > span:not(.brand-mark),
+.brand-mark {
+  color: var(--accent);
+}
+.brand em,
+.local-tag {
+  color: var(--muted);
+}
+.header-actions button,
+.header-actions select {
+  background: var(--surface-raised);
+  color: var(--text);
+  border-color: var(--border);
+}
+.header-actions .primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+.palette,
+.inspector,
+.canvas-toolbar,
+.bottom-panel,
+.statusbar,
+.ide-actions,
+.companion-bar,
+.editor-tools,
+.debug-grid article {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.canvas,
+.react-flow,
+.react-flow__pane {
+  background-color: var(--canvas);
+}
+.react-flow__controls button,
+.react-flow__minimap {
+  background: var(--surface);
+  color: var(--text);
+  border-color: var(--border);
+}
+.react-flow__controls button svg {
+  fill: currentColor;
+}
+.react-flow__edge-text {
+  fill: var(--text);
+}
+.react-flow__edge-textbg {
+  fill: var(--surface);
+}
+.canvas-tip {
+  background: var(--surface);
+  color: var(--muted);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.canvas-note,
+.note-separator,
+.document-title small,
+.section-kicker,
+.tiny-label,
+.palette-category,
+.palette-card small,
+.palette-card > svg,
+.palette-help p,
+.palette-footer,
+.inspector-heading > span,
+.inspector-empty,
+.inspector-empty h3,
+.inspector-empty p,
+.phase-card p,
+.phase-card > div,
+.selected-type p,
+.property-section h4,
+.property-section label,
+.pin-reference small,
+.muted,
+.statusbar,
+.statusbar strong,
+.editor-tools span,
+.firmware-title small,
+.simulation-clock span,
+.serial-heading,
+.serial-console p,
+.board-details p,
+.board-details small,
+.uart-input span,
+.gpio-states > p,
+.gpio-states .hiz,
+.panel-state,
+.finding small {
+  color: var(--muted);
+}
+.search,
+.property-section input,
+.property-section input[readonly],
+.board-details select,
+.uart-input input:disabled {
+  background: var(--surface-raised);
+  color: var(--text);
+  border-color: var(--border);
+}
+.search input {
+  background: transparent;
+  color: var(--text);
+}
+.search kbd,
+h2 span,
+.panel-tabs button span {
+  background: var(--surface-raised);
+  color: var(--muted);
+}
+.palette-card {
+  background: transparent;
+  border-bottom-color: var(--border);
+}
+.palette-card:hover {
+  background: var(--surface-hover);
+}
+.palette-icon {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.palette-help {
+  background: var(--surface-raised);
+  border-color: var(--border);
+}
+.palette-help > span:last-child,
+.phase-card > span,
+.yd-example,
+.firmware-title,
+.empty-check,
+.empty-check strong,
+.serial-console {
+  color: var(--accent);
+}
+.main-tabs button,
+.source-tabs button,
+.panel-tabs button {
+  color: var(--muted);
+}
+.main-tabs button[aria-selected="true"],
+.source-tabs button[aria-selected="true"],
+.panel-tabs button.active {
+  background: var(--surface);
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.validate,
+.selected-icon {
+  color: var(--accent);
+  background: var(--accent-soft);
+  border-color: var(--border);
+}
+.simulation-controls,
+.firmware-buttons button {
+  background: var(--surface-raised);
+  border-color: var(--border);
+}
+.build-output,
+.event-timeline,
+.ide-serial {
+  background: var(--canvas);
+  color: var(--text);
+  border-color: var(--border);
+}
+.demo-badge,
+.model-warning,
+.board-confirmation,
+.board-details .board-confirmation,
+.simulation-capabilities,
+.finding {
+  color: var(--warning);
+  background: var(--surface-raised);
+}
+.finding.error,
+.simulation-error,
+.delete-button {
+  color: var(--danger);
+}
+/* Change neutral component wrappers only, retaining native board/hardware colours and pin states. */
+.part:not(.part-uno):not(.yd-board-node) {
+  background-color: var(--surface-raised);
+  color: var(--text);
+  border-color: var(--border);
+}
+.part:not(.part-uno):not(.yd-board-node) .part-code,
+.part:not(.part-uno):not(.yd-board-node) .pin-label:not(.active-channel) {
+  color: var(--muted);
+}
+.theme-selector {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.theme-selector select {
+  min-height: 34px;
+  max-width: 155px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface-raised);
+  color: var(--text);
+  font-size: 12px;
+}
+.palette-filter {
+  display: grid;
+  gap: 6px;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.palette-filter select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.palette-group h3 {
+  margin: 20px 0 7px;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.palette-empty {
+  color: var(--muted);
+  line-height: 1.6;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .theme-selector select {
+    transition: border-color 120ms ease;
+  }
+}
+
+/* Account and workspace controls have separate rows to preserve a readable top-right selector. */
+.app > .topbar {display:grid;grid-template-columns:auto minmax(0,1fr) auto;height:auto;min-height:104px;padding:12px 18px;gap:10px 24px;}
+.app > .topbar > .account-controls {grid-column:3;justify-content:flex-end;flex-wrap:nowrap;min-width:0;}
+.app > .topbar > .header-actions {grid-column:1/-1;justify-self:end;max-width:100%;margin:0;overflow-x:auto;padding:2px;}
+.app > .topbar > .breadcrumb {overflow:hidden;white-space:nowrap;}
+.app > .topbar > .breadcrumb strong {overflow:hidden;text-overflow:ellipsis;}
+@media(max-width:1100px){.app > .topbar {grid-template-columns:auto minmax(0,1fr);gap:8px 16px;}.app > .topbar > .account-controls {grid-column:2;}.app > .topbar .breadcrumb {display:none;}.app > .topbar .account-controls > span {display:none;}}
+@media(max-width:650px){.app > .topbar {grid-template-columns:minmax(0,1fr);}.app > .topbar > .account-controls {grid-column:1;justify-content:flex-start;flex-wrap:wrap;}.app > .topbar > .header-actions{justify-self:stretch;}.app > .topbar .brand{font-size:22px;}}

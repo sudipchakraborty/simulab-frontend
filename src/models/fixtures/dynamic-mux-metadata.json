@@ -1,0 +1,20 @@
+{
+  "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+  "command": [
+    "avr-gcc",
+    "-mmcu=atmega328p",
+    "-DF_CPU=16000000UL",
+    "-std=gnu11",
+    "-Os",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "-o",
+    "firmware/dynamic-mux.elf",
+    "firmware/dynamic-mux.c"
+  ],
+  "sourceSha256": "2357fdd83e0df0d0d5cb474b14fbedddbe3fcab8baa74c243d130c617afc7839",
+  "elfSha256": "681b1e44a62da2af00c03123a7c76ba3eeba54b8ebd5d2d39a73d1c89bcfef4a",
+  "hexSha256": "28040642457532e4867889e3040213bac9601460310db207730625ec364c911e",
+  "hardwareComparison": "not performed"
+}

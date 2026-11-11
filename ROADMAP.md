@@ -2,12 +2,12 @@
 
 | Phase | Deliverable | Exit gate |
 | --- | --- | --- |
-| 1 â€” Foundation | Editor, explicit pins/wires/junctions, checks, JSON projects | Build/start, placement, correct connections, independent crossings, persistence and tests verified |
-| 2 â€” AVR | Genuine ATmega328P execution, GPIO/netlist bridge, UART | Compiled firmware runs in verified emulator; results checked against hardware expectations |
-| 3 â€” ESP32-S3 | Compatible firmware and supported peripherals | Correct firmware executes; peripherals independently verified |
-| 4 â€” Automatic gate | Motor/driver, sensors and deterministic mechanics | Motion derives from engine signals; limits, obstruction, stop and reversal tested |
-| 5 â€” SaaS backend | Accounts, authorized projects, compilation orchestration | Isolation, quotas, timeouts, access control and audit tests pass |
-| 6 â€” Commercial | Subscriptions, teams, 3D, more MCU families | Commercial, security, operational and licensing requirements reviewed |
+| 1 — Foundation | Editor, explicit pins/wires/junctions, checks, JSON projects | Build/start, placement, correct connections, independent crossings, persistence and tests verified |
+| 2 — AVR | Genuine ATmega328P execution, GPIO/netlist bridge, UART | Compiled firmware runs in verified emulator; results checked against hardware expectations |
+| 3 — ESP32-S3 | Compatible firmware and supported peripherals | Correct firmware executes; peripherals independently verified |
+| 4 — Automatic gate | Motor/driver, sensors and deterministic mechanics | Motion derives from engine signals; limits, obstruction, stop and reversal tested |
+| 5 — SaaS backend | Accounts, authorized projects, compilation orchestration | Isolation, quotas, timeouts, access control and audit tests pass |
+| 6 — Commercial | Subscriptions, teams, 3D, more MCU families | Commercial, security, operational and licensing requirements reviewed |
 
 Arduino Mega requires independent ATmega2560 mappings and firmware tests. Uno results do not verify Mega. AVR execution cannot substitute for ESP32-S3.
 
@@ -22,3 +22,7 @@ Browser AVR integration implemented and tested with compiled fixtures. Hardware 
 ## S3 milestone update
 
 YD board graphics/metadata and genuine S3 ROM/firmware boot, GPIO output, wired input and UART are implemented and tested. ExactV1.3 physical confirmation/fullN16R8 sizing, WS2812 waveform integration and externalI2C/DS1307 remain open gates. They are not claimed complete by the board appearing in the editor. Backend/commercial phases remain untouched.
+
+## Components/IDE update (2026-11-06)
+
+The earlier AVR-evaluation and S3-not-started next-task paragraphs above are historical. Current work adds DS3231, HC/B mux, motor/H-bridge, WS2812B and relay models, a four-tab persistent Monaco IDE and a restricted Arduino CLI local companion. Software verification is reported in docs/COMPONENTS_IDE_TEST_REPORT.md. Open physical gates: board identity/memory confirmation, hardware parity/upload/USB serial, GDB/OpenOCD, S3 external I2C/waveform hooks. Original ESP32 execution and full analog solving remain unsupported. Cloud SaaS/commercial phases are outside this local IDE milestone.

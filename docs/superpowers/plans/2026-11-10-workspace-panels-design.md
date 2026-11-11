@@ -1,0 +1,5 @@
+# Resizable fixed workspace panels
+
+Approved by user on 2026-11-10: option1, fixed edge panels. Top toolbar, left component library, right Inspector and bottom output can be hidden and restored from an always-visible Layout menu. Drag their borders to resize. Remember layout separately for each workspace identity and provide Reset layout. Keep mounted state so panel visibility cannot restart simulation or erase source/circuit data.
+
+Implementation choices: reusable dependency-free React DockPanel/ResizeHandle plus a validated local layout preference model; local browser persistence (appearance only), separate from project exports/auth/subscriptions. Bottom means hardware checks/netlist/UART on Hardware and build console on other tabs. Side panels remain available beside every workspace tab. On narrow screens, side panels use overlays when explicitly opened; initial narrow layout leaves canvas usable. Keyboard arrows/Home/End resize; pointer capture supports mouse/touch and cancellation. Bounds preserve a usable central workspace. Reset restores sensible viewport defaults.

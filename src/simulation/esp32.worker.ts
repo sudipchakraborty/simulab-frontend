@@ -4,6 +4,7 @@ import { parseProject } from "../circuit/project";
 import type { CircuitProject } from "../circuit/types";
 import { projectSignals } from "./projection";
 import { buttonInputs } from "./buttonInputs";
+import { CircuitRuntime } from "../models/circuitRuntime";
 import {
   PROTOCOL_VERSION,
   type SimulationCommand,
@@ -14,12 +15,23 @@ let runtime: Esp32S3Runtime | undefined,
   project: CircuitProject | undefined,
   timer: ReturnType<typeof setTimeout> | undefined;
 let loading = false;
+let devices: CircuitRuntime | undefined;
 const cancel = () => clearTimeout(timer);
 const reply = (message: SimulationReply) => scope.postMessage(message);
-const capture = (snapshot: ReturnType<Esp32S3Runtime["snapshot"]>) => ({
-  snapshot,
-  projection: projectSignals(project!, snapshot.gpio),
-});
+const capture = (snapshot: ReturnType<Esp32S3Runtime["snapshot"]>) => {
+  if (snapshot.timeMicros < devices!.timeMicros)
+    devices = new CircuitRuntime(project!, "esp32s3");
+  const projection = projectSignals(project!, snapshot.gpio);
+  projection.components = devices!.advance(snapshot.timeMicros, snapshot.gpio);
+  Object.assign(projection.ledStates, devices!.ledStates());
+  for (const [pin, level] of Object.entries(devices!.inputLevels()))
+    if (snapshot.gpio[pin] === null && level !== null)
+      runtime!.setPin(pin, level === 1);
+  projection.issues.push(
+    ...Object.values(projection.components).flatMap((c) => c.warnings),
+  );
+  return { snapshot, projection };
+};
 const snapshot = (id: number) => {
   if (!runtime) throw new Error("Load an ESP32-S3 merged flash image first.");
   reply({
@@ -90,7 +102,7 @@ scope.onmessage = async (event: MessageEvent<SimulationCommand>) => {
       if (
         project.components.filter((c) => c.kind === "yd-esp32-s3").length !==
           1 ||
-        project.components.some((c) => c.kind === "uno")
+        project.components.some((c) => ["uno","nano","mega2560"].includes(c.kind))
       )
         throw new Error(
           "ESP32-S3 execution requires exactly one YD board and no AVR board.",
@@ -102,6 +114,7 @@ scope.onmessage = async (event: MessageEvent<SimulationCommand>) => {
       });
       runtime?.dispose();
       runtime = new Esp32S3Runtime(bindings, new Uint8Array(command.firmware));
+      devices = new CircuitRuntime(project, "esp32s3");
       applyInputs();
       snapshot(id);
       loading = false;
@@ -122,6 +135,7 @@ scope.onmessage = async (event: MessageEvent<SimulationCommand>) => {
         cancel();
         runtime[command.type]();
         if (command.type === "reset") {
+          devices = new CircuitRuntime(project!, "esp32s3");
           project = {
             ...project!,
             components: project!.components.map((c) =>
@@ -166,6 +180,7 @@ scope.onmessage = async (event: MessageEvent<SimulationCommand>) => {
               : c,
           ),
         };
+        devices!.setButton(command.componentId, command.pressed);
         applyInputs();
         snapshot(id);
         break;

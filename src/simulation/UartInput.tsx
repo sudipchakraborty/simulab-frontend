@@ -13,7 +13,7 @@ export function UartInput({
 }) {
   const [text, setText] = useState("");
   const enabled =
-    simulation.target === "esp32s3" && simulation.status === "running";
+    simulation.status === "running";
   return (
     <div className="uart-input">
       <form
@@ -30,7 +30,7 @@ export function UartInput({
           placeholder={
             simulation.target === "esp32s3"
               ? "Send a line to guest firmware (MicroPython REPL supported)"
-              : "UART RX unavailable for Uno adapter"
+              : "Send a line to AVR firmware"
           }
           disabled={!enabled}
           onChange={(e) => setText(e.target.value)}

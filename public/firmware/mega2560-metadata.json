@@ -1,0 +1,16 @@
+{
+  "target": "atmega2560",
+  "clockHz": 16000000,
+  "compiler": "avr-gcc.exe (GCC) 7.3.0\r",
+  "compilerCommand": "avr-gcc -mmcu=atmega2560 -DF_CPU=16000000UL -std=gnu11 -Os -Wall -Wextra -Werror -o firmware/mega2560.elf firmware/mega2560.c",
+  "sourceSha256": "05f00fac5d88aba1524234c76d7b73b0d00d9aebe375f7c299d647f7216276ed",
+  "hexSha256": "38760215da1adc7ef8707f3e683ab0b01ba19a7c30f946faff215449f0aeff63",
+  "elfSha256": "42b4ae60a62d779a1da1fec41c78c8ce00be6b629fa892214c00459eeab0cf6d",
+  "hardwareComparison": "not performed",
+  "verified": [
+    "native GPIO high registers",
+    "Timer1 interrupt",
+    "USART0 TX/RX",
+    "3-byte PC stack"
+  ]
+}

@@ -12,3 +12,14 @@ describe("document history", () => {
     expect(useEditor.getState().project).toEqual(next);
   });
 });
+
+it("starts a blank document with no previous undo/redo history", () => {
+  const before = useEditor.getState().project;
+  useEditor.getState().commit({ ...before, name: "old draft" });
+  const blank = { ...before, components: [], wires: [] };
+  useEditor.getState().reset(blank);
+  expect(useEditor.getState().past).toEqual([]);
+  expect(useEditor.getState().future).toEqual([]);
+  useEditor.getState().undo();
+  expect(useEditor.getState().project).toBe(blank);
+});

@@ -4,15 +4,17 @@ import type { SimulationController } from "./useSimulation";
 /** @brief Target-specific files and controls; instructions execute only in the owning Worker. */
 export function SimulationControls({
   simulation,
+  enabled=true,
 }: {
   simulation: SimulationController;
+  enabled?:boolean;
 }) {
   const input = useRef<HTMLInputElement>(null);
   const [fileError, setFileError] = useState("");
   const { status, target, snapshot, firmwareName, error, command, load } =
     simulation;
   const esp = target === "esp32s3",
-    supported = target === "uno" || esp,
+    supported = ["uno","nano","mega2560"].includes(target) || esp,
     active = ["ready", "running", "paused", "stopped"].includes(status),
     budgetReached = (snapshot?.timeMicros ?? 0) >= 60_000_000;
   return (
@@ -26,7 +28,7 @@ export function SimulationControls({
           <strong>
             {esp
               ? "ESP32-S3 / Xtensa LX7"
-              : target === "uno"
+              : target === "mega2560" ? "ATmega2560" : ["uno","nano"].includes(target)
                 ? "ATmega328P"
                 : "One MCU per session"}
           </strong>
@@ -40,11 +42,11 @@ export function SimulationControls({
       </div>
       <div className="firmware-buttons">
         <button
-          disabled={status === "loading" || !supported}
+          disabled={!enabled || status === "loading" || !supported}
           onClick={async () => {
             setFileError("");
             try {
-              const file = esp ? "esp32s3-reference.bin" : "blink-uart.hex";
+              const file = esp ? "esp32s3-reference.bin" : target === "mega2560" ? "mega2560.hex" : "blink-uart.hex";
               const response = await fetch("/firmware/" + file);
               if (!response.ok)
                 throw new Error("Reference firmware unavailable.");
@@ -63,7 +65,7 @@ export function SimulationControls({
         </button>
         <button
           aria-label={esp ? "Upload ESP32-S3 firmware" : "Upload HEX firmware"}
-          disabled={status === "loading" || !supported}
+          disabled={!enabled || status === "loading" || !supported}
           onClick={() => input.current?.click()}
         >
           <Upload size={13} />
@@ -80,7 +82,7 @@ export function SimulationControls({
         ) : status === "paused" ? (
           <button
             aria-label="Resume simulation"
-            disabled={budgetReached}
+            disabled={!enabled || budgetReached}
             onClick={() => command("resume")}
           >
             <Play size={15} />
@@ -88,7 +90,7 @@ export function SimulationControls({
         ) : (
           <button
             aria-label="Start simulation"
-            disabled={!active}
+            disabled={!enabled || !active}
             onClick={() => command("start")}
           >
             <Play size={15} />
@@ -103,7 +105,7 @@ export function SimulationControls({
         </button>
         <button
           aria-label="Reset simulation"
-          disabled={!active}
+          disabled={!enabled || !active}
           onClick={() => command("reset")}
         >
           <RotateCcw size={15} />
@@ -141,7 +143,7 @@ export function SimulationControls({
           if (!file) return;
           setFileError("");
           try {
-            if (file.size > (esp ? 16 * 1024 * 1024 : 131072))
+            if (file.size > (esp ? 16 * 1024 * 1024 : target==='mega2560'?1048576:131072))
               throw new Error("Firmware exceeds target size limit.");
             load(esp ? await file.arrayBuffer() : await file.text(), file.name);
           } catch (e) {

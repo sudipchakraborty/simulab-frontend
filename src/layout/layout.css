@@ -1,0 +1,359 @@
+﻿/* Fixed edge panels; theme variables are supplied by the host app. */
+.layout-bar {
+  height: 32px;
+  flex: 0 0 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 16px;
+  background: var(--header);
+  color: var(--text);
+  border-bottom: 1px solid var(--border);
+  z-index: 60;
+}
+.layout-caption {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+}
+.layout-menu {
+  position: relative;
+  font-size: 12px;
+}
+.layout-menu summary {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  padding: 5px 9px;
+  border-radius: 4px;
+  list-style: none;
+}
+.layout-menu summary::-webkit-details-marker {
+  display: none;
+}
+.layout-menu summary:hover,
+.layout-menu[open] summary {
+  background: var(--surface-hover);
+}
+.layout-popover {
+  position: absolute;
+  top: 30px;
+  right: 0;
+  width: 260px;
+  max-width: calc(100vw - 24px);
+  padding: 16px;
+  display: grid;
+  gap: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 7px;
+  box-shadow: var(--shadow);
+  z-index: 80;
+}
+.layout-popover label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.layout-popover input {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+}
+.layout-popover small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+}
+.layout-menu-actions {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+.layout-menu-actions button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text);
+  background: var(--surface-raised);
+  border-color: var(--border);
+  font-size: 11px;
+  padding: 7px;
+}
+.dock-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  background: var(--surface);
+  color: var(--text);
+  overflow: hidden;
+}
+.dock-heading {
+  height: 25px;
+  flex: 0 0 25px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px 0 12px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface-raised);
+}
+.dock-heading button {
+  width: 23px;
+  height: 21px;
+  padding: 2px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+}
+.dock-heading button:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+.dock-content {
+  min-height: 0;
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.dock-top {
+  height: var(--pane-size);
+  flex: 0 0 var(--pane-size);
+}
+.dock-top .dock-content {
+  overflow: auto;
+}
+.dock-left,
+.dock-right {
+  width: var(--pane-size);
+  flex: 0 0 var(--pane-size);
+}
+.dock-left {
+  border-right: 1px solid var(--border);
+}
+.dock-right {
+  border-left: 1px solid var(--border);
+}
+.dock-bottom {
+  height: var(--pane-size);
+  flex: 0 0 var(--pane-size);
+  border-top: 1px solid var(--border);
+}
+.dock-left .palette,
+.dock-right .inspector {
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  flex: 1;
+}
+.dock-left .palette {
+  padding-top: 16px;
+}
+.dock-bottom .bottom-panel {
+  height: auto !important;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.dock-bottom .panel-tabs {
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+.dock-bottom .panel-content {
+  height: auto !important;
+  max-height: none !important;
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+.dock-bottom .build-output {
+  flex: 1;
+  min-height: 0;
+  max-height: none;
+  overflow: auto;
+}
+.dock-bottom .build-output details[open] {
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+  resize: none;
+}
+.dock-bottom .build-output pre {
+  max-height: none;
+}
+.workspace-shell {
+  position: relative;
+  overflow: hidden;
+}
+.dock-resizer {
+  position: absolute;
+  z-index: 30;
+  touch-action: none;
+  user-select: none;
+  outline-offset: -2px;
+}
+.dock-resizer.vertical {
+  top: 25px;
+  bottom: 0;
+  width: 7px;
+  cursor: col-resize;
+}
+.dock-left > .dock-resizer {
+  right: 0;
+}
+.dock-right > .dock-resizer {
+  left: 0;
+}
+.dock-resizer.horizontal {
+  left: 0;
+  right: 0;
+  height: 7px;
+  cursor: row-resize;
+}
+.dock-top > .dock-resizer {
+  bottom: 0;
+}
+.dock-bottom > .dock-resizer {
+  top: 0;
+}
+.dock-resizer:hover,
+.dock-resizer:focus-visible {
+  background: var(--accent);
+  opacity: 0.65;
+}
+.app .dock-top .topbar {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  height: auto;
+  min-height: 104px;
+  padding: 10px 18px;
+  gap: 8px 24px;
+  flex-shrink: 0;
+}
+.app .dock-top .topbar > .account-controls {
+  grid-column: 3;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+.app .dock-top .topbar > .header-actions {
+  grid-column: 1/-1;
+  justify-self: end;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: auto;
+  padding: 2px;
+}
+.app .dock-top .breadcrumb {
+  overflow: hidden;
+  white-space: nowrap;
+}
+.app .dock-top .breadcrumb strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 1100px) {
+  .app .dock-top .topbar {
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 8px 16px;
+  }
+  .app .dock-top .topbar > .account-controls {
+    grid-column: 2;
+  }
+  .app .dock-top .breadcrumb {
+    display: none;
+  }
+  .app .dock-top .account-controls > span {
+    display: none;
+  }
+}
+@media (max-width: 899px) {
+  .dock-left,
+  .dock-right {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    z-index: 35;
+    max-width: calc(100% - 32px);
+    box-shadow: var(--shadow);
+  }
+  .dock-left {
+    left: 0;
+  }
+  .dock-right {
+    right: 0;
+  }
+}
+@media (max-width: 650px) {
+  .app .dock-top .topbar {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+  .app .dock-top .topbar > .account-controls {
+    grid-column: 1;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+  .app .dock-top .topbar > .header-actions {
+    justify-self: stretch;
+  }
+  .app .dock-top .brand {
+    font-size: 22px;
+  }
+}
+
+.workspace-center {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+}
+.dock-resizer::after {
+  content: "";
+  position: absolute;
+  background: var(--border);
+  border-radius: 2px;
+  pointer-events: none;
+}
+.dock-resizer.vertical::after {
+  width: 2px;
+  height: 30px;
+  left: 2px;
+  top: calc(50% - 15px);
+}
+.dock-resizer.horizontal::after {
+  height: 2px;
+  width: 30px;
+  top: 2px;
+  left: calc(50% - 15px);
+}
+
+/* Minima are part of the resize budget, not the old fixed-height editor assumptions. */
+.workspace-center {
+  overflow: auto;
+}
+.workspace-center > .studio {
+  min-height: 0;
+}
+.workspace-center .canvas {
+  min-height: 120px;
+}
+.workspace-center .canvas-toolbar,
+.workspace-center .simulation-controls {
+  flex-shrink: 0;
+}

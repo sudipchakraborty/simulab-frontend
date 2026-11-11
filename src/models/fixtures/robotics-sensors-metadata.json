@@ -1,0 +1,9 @@
+{
+    "compiler":  "avr-gcc 7.3.0",
+    "hardwareComparison":  "not performed",
+    "hexSha256":  "91a324bd5ce9db74edb70be7279b38ba3a733c657faee2fd9123457c60820d28",
+    "elfSha256":  "848f01fa5e13e999434ba6af0fd903a72418c920537b826a8a883477343babe2",
+    "command":  "avr-gcc -mmcu=atmega328p -DF_CPU=16000000UL -std=gnu11 -Os -Wall -Wextra -Werror; avr-objcopy -O ihex -R .eeprom",
+    "sourceSha256":  "3149517859e029bb28b38784630c90d1e9c4e925a49ae37b68c1aae62b7e361c",
+    "verification":  "Real AVR UART H FF FF FE D 02 58 80 7B 55 through wired HX711/DHT22 models"
+}
